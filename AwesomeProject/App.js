@@ -1,9 +1,8 @@
 // import { StatusBar } from "expo-status-bar";
 import React from "react";
 import LoginScreen from "./Screens/components/LoginScreen/LoginScreen";
-// import { StyleSheet, Text, View, ImageBackground } from "react-native";
+import { StyleSheet, Text, View, ImageBackground } from "react-native";
 // import RegistrationScreen from "./Screens/components/RegistrationScreen/RegistrationScreen";
-const image = { uri: "https://legacy.reactjs.org/logo-og.png" };
 
 export default function App() {
   return <LoginScreen></LoginScreen>;

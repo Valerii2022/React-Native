@@ -5,7 +5,6 @@ import {
   ImageBackground,
   Text,
   TextInput,
-  Pressable,
 } from "react-native";
 import Button from "../Button/Button";
 
@@ -23,10 +22,11 @@ const LoginScreen = () => {
             style={styles.input}
             placeholder="Адреса електронної пошти"
           ></TextInput>
-          <TextInput style={styles.input}>
-            <Text style={styles.text}>Показати</Text>
-          </TextInput>
-          <Button />
+          <View>
+            <TextInput style={styles.input} placeholder="Пароль"></TextInput>
+            <Text style={styles.inputLink}>Показати</Text>
+          </View>
+          <Button title={"Увійти"} />
           <Text style={styles.text}>Немає акаунту? Зареєстуватися</Text>
         </View>
       </ImageBackground>
@@ -78,6 +78,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   text: {
+    color: "#1B4371",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    lineHeight: 18.75,
+    textAlign: "center",
+  },
+  inputLink: {
+    position: "absolute",
+    right: 16,
+    top: 16,
     color: "#1B4371",
     fontFamily: "Roboto",
     fontSize: 16,

@@ -4,7 +4,7 @@ const Button = (props) => {
   const { onPress, title = "Save" } = props;
   return (
     <Pressable style={styles.button} onPress={onPress}>
-      <Text style={styles.text}>Увійти</Text>
+      <Text style={styles.text}>{title}</Text>
     </Pressable>
   );
 };
