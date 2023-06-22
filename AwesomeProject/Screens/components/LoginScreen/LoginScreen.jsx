@@ -5,7 +5,9 @@ import {
   ImageBackground,
   Text,
   TextInput,
+  Pressable,
 } from "react-native";
+import Button from "../Button/Button";
 
 const LoginScreen = () => {
   return (
@@ -17,8 +19,15 @@ const LoginScreen = () => {
       >
         <View style={styles.loginContainer}>
           <Text style={styles.title}>Увійти</Text>
-          <TextInput style={styles.input}>Адреса електронної пошти</TextInput>
-          <TextInput style={styles.input} />
+          <TextInput
+            style={styles.input}
+            placeholder="Адреса електронної пошти"
+          ></TextInput>
+          <TextInput style={styles.input}>
+            <Text style={styles.text}>Показати</Text>
+          </TextInput>
+          <Button />
+          <Text style={styles.text}>Немає акаунту? Зареєстуватися</Text>
         </View>
       </ImageBackground>
     </View>
@@ -35,18 +44,15 @@ const styles = StyleSheet.create({
   },
   loginContainer: {
     width: "100%",
-    height: 489,
+    height: 410,
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingTop: 32,
     paddingLeft: 16,
     paddingRight: 16,
-    // marginTop: "auto",
-    // marginBottom: 0,
-    position: "fixed",
-    left: 0,
-    bottom: 0,
+    marginTop: "auto",
+    marginBottom: 0,
   },
   title: {
     fontFamily: "Roboto",
@@ -70,6 +76,13 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     borderRadius: 8,
+  },
+  text: {
+    color: "#1B4371",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    lineHeight: 18.75,
+    textAlign: "center",
   },
 });
 
