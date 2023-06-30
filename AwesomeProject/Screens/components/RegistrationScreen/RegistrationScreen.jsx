@@ -39,7 +39,9 @@ const RegistrationScreen = () => {
             <TextInput style={styles.input} placeholder="Пароль"></TextInput>
             <Text style={styles.inputLink}>Показати</Text>
           </View>
-          <Button title={"Зареєструватися"} />
+          <View style={styles.btnWrap}>
+            <Button title={"Увійти"} />
+          </View>
           <Text style={styles.text}>
             Вже є акаунт?
             <Text style={styles.textLink}> Увійти</Text>
@@ -127,6 +129,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 18.75,
     textAlign: "center",
+  },
+  btnWrap: {
+    marginTop: 27,
+    marginBottom: 16,
+    height: 50,
   },
 });
 

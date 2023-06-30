@@ -13,11 +13,8 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 16,
-    marginTop: 27,
-    marginBottom: 16,
     width: "100%",
-    height: 50,
+    height: "100%",
     borderRadius: 100,
     elevation: 3,
     backgroundColor: "#FF6C00",
