@@ -5,12 +5,17 @@ import {
   ImageBackground,
   Text,
   TextInput,
+  KeyboardAvoidingView,
 } from "react-native";
 import Button from "../Button/Button";
 
 const LoginScreen = () => {
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={"height"}
+      keyboardVerticalOffset={-208}
+    >
       <ImageBackground
         source={require("../../../assets/images/BG.png")}
         resizeMode="cover"
@@ -33,7 +38,7 @@ const LoginScreen = () => {
           </Text>
         </View>
       </ImageBackground>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -47,7 +52,7 @@ const styles = StyleSheet.create({
   },
   loginContainer: {
     width: "100%",
-    height: 370,
+    height: 455,
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,

@@ -6,12 +6,17 @@ import {
   ImageBackground,
   Text,
   TextInput,
+  KeyboardAvoidingView,
 } from "react-native";
 import Button from "../Button/Button";
 
 const RegistrationScreen = () => {
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={"height"}
+      keyboardVerticalOffset={-142}
+    >
       <ImageBackground
         source={require("../../../assets/images/BG.png")}
         resizeMode="cover"
@@ -41,7 +46,7 @@ const RegistrationScreen = () => {
           </Text>
         </View>
       </ImageBackground>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -70,7 +75,7 @@ const styles = StyleSheet.create({
   },
   registrationContainer: {
     width: "100%",
-    height: 510,
+    height: 515,
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
