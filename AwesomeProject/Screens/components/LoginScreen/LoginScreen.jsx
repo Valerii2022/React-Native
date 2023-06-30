@@ -27,7 +27,10 @@ const LoginScreen = () => {
             <Text style={styles.inputLink}>Показати</Text>
           </View>
           <Button title={"Увійти"} />
-          <Text style={styles.text}>Немає акаунту? Зареєстуватися</Text>
+          <Text style={styles.text}>
+            Немає акаунту?
+            <Text style={styles.textLink}> Зареєстуватися</Text>
+          </Text>
         </View>
       </ImageBackground>
     </View>
@@ -44,7 +47,7 @@ const styles = StyleSheet.create({
   },
   loginContainer: {
     width: "100%",
-    height: 410,
+    height: 370,
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     fontSize: 30,
     lineHeight: 35,
-    marginBottom: 33,
+    marginBottom: 32,
     marginLeft: "auto",
     marginRight: "auto",
     letterSpacing: 0.01,
@@ -83,6 +86,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 18.75,
     textAlign: "center",
+  },
+  textLink: {
+    textDecorationLine: "underline",
   },
   inputLink: {
     position: "absolute",

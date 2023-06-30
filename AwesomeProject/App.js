@@ -1,12 +1,12 @@
 // import { StatusBar } from "expo-status-bar";
 import React from "react";
-import LoginScreen from "./Screens/components/LoginScreen/LoginScreen";
+// import LoginScreen from "./Screens/components/LoginScreen/LoginScreen";
 import { StyleSheet, Text, View, ImageBackground } from "react-native";
-// import RegistrationScreen from "./Screens/components/RegistrationScreen/RegistrationScreen";
+import RegistrationScreen from "./Screens/components/RegistrationScreen/RegistrationScreen";
 
 export default function App() {
-  return <LoginScreen></LoginScreen>;
-  // return <RegistrationScreen></RegistrationScreen>;
+  // return <LoginScreen></LoginScreen>;
+  return <RegistrationScreen></RegistrationScreen>;
   // return (
   //   <View style={styles.container}>
   //     <Text>Open up App.js to start working on your app!</Text>

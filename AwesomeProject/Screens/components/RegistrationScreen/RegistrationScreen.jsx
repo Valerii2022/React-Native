@@ -35,7 +35,10 @@ const RegistrationScreen = () => {
             <Text style={styles.inputLink}>Показати</Text>
           </View>
           <Button title={"Зареєструватися"} />
-          <Text style={styles.text}>Вже є акаунт? Увійти</Text>
+          <Text style={styles.text}>
+            Вже є акаунт?
+            <Text style={styles.textLink}> Увійти</Text>
+          </Text>
         </View>
       </ImageBackground>
     </View>
@@ -67,7 +70,7 @@ const styles = StyleSheet.create({
   },
   registrationContainer: {
     width: "100%",
-    height: 549,
+    height: 510,
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -82,7 +85,7 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     fontSize: 30,
     lineHeight: 35,
-    marginBottom: 33,
+    marginBottom: 32,
     marginLeft: "auto",
     marginRight: "auto",
     letterSpacing: 0.01,
@@ -106,6 +109,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 18.75,
     textAlign: "center",
+  },
+  textLink: {
+    textDecorationLine: "underline",
   },
   inputLink: {
     position: "absolute",
