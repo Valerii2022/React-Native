@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -6,41 +6,94 @@ import {
   Text,
   TextInput,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import Button from "../Button/Button";
 
 const LoginScreen = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passSecure, setPassSecure] = useState(true);
+  const [focusEmail, setFocusEmail] = useState(false);
+  const [focusPassword, setFocusPassword] = useState(false);
+
+  const onLogin = () => {
+    console.log(
+      `Адреса електронної пошти - "${email}", пароль - "${password}"`
+    );
+    setEmail("");
+    setPassword("");
+  };
+
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={"height"}
-      keyboardVerticalOffset={-208}
-    >
-      <ImageBackground
-        source={require("../../../assets/images/BG.png")}
-        resizeMode="cover"
-        style={styles.image}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={-208}
       >
-        <View style={styles.loginContainer}>
-          <Text style={styles.title}>Увійти</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Адреса електронної пошти"
-          ></TextInput>
-          <View>
-            <TextInput style={styles.input} placeholder="Пароль"></TextInput>
-            <Text style={styles.inputLink}>Показати</Text>
+        <ImageBackground
+          source={require("../../../assets/images/BG.png")}
+          resizeMode="cover"
+          style={styles.image}
+        >
+          <View style={styles.loginContainer}>
+            <Text style={styles.title}>Увійти</Text>
+            <TextInput
+              onFocus={() => {
+                setFocusEmail(true);
+              }}
+              onBlur={() => {
+                setFocusEmail(false);
+              }}
+              value={email}
+              onChangeText={setEmail}
+              style={
+                focusEmail
+                  ? [styles.focusedTextInput, styles.textInput]
+                  : styles.textInput
+              }
+              placeholder="Адреса електронної пошти"
+            ></TextInput>
+            <View>
+              <TextInput
+                onFocus={() => {
+                  setFocusPassword(true);
+                }}
+                onBlur={() => {
+                  setFocusPassword(false);
+                }}
+                secureTextEntry={passSecure}
+                value={password}
+                onChangeText={setPassword}
+                style={
+                  focusPassword
+                    ? [styles.focusedTextInput, styles.textInput]
+                    : styles.textInput
+                }
+                placeholder="Пароль"
+              ></TextInput>
+              <Text
+                style={styles.inputLink}
+                onPress={() => {
+                  setPassSecure(!passSecure);
+                }}
+              >
+                {passSecure ? "Показати" : "Сховати"}
+              </Text>
+            </View>
+            <View style={styles.btnWrap}>
+              <Button title={"Увійти"} onPress={onLogin} />
+            </View>
+            <Text style={styles.text}>
+              Немає акаунту?
+              <Text style={styles.textLink}> Зареєстуватися</Text>
+            </Text>
           </View>
-          <View style={styles.btnWrap}>
-            <Button title={"Увійти"} />
-          </View>
-          <Text style={styles.text}>
-            Немає акаунту?
-            <Text style={styles.textLink}> Зареєстуватися</Text>
-          </Text>
-        </View>
-      </ImageBackground>
-    </KeyboardAvoidingView>
+        </ImageBackground>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -75,7 +128,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.01,
     color: "#212121",
   },
-  input: {
+  textInput: {
     width: "100%",
     height: 50,
     backgroundColor: "#f6f6f6",
@@ -86,6 +139,10 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     borderRadius: 8,
+  },
+  focusedTextInput: {
+    borderColor: "#ff6c00",
+    borderWidth: 1,
   },
   text: {
     color: "#1B4371",
