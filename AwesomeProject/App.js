@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-// import React from "react";
+import React from "react";
 // import LoginScreen from "./Screens/components/LoginScreen/LoginScreen";
 import { StyleSheet, Text, View } from "react-native";
 // import PostsScreen from "./Screens/PostsScreen/PostsScreen";

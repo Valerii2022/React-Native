@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert
 } from "react-native";
 import Button from "../Button/Button";
 
@@ -21,7 +22,25 @@ const RegistrationScreen = () => {
   const [focusEmail, setFocusEmail] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
 
+  const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
   const signIn = () => {
+    if(login === "" || email === "" || password === ""){
+      Alert.alert("Всі поля обов'язкові для заповнення!")
+      return
+    }
+    if (reg.test(email) === false) {
+      Alert.alert("Невірний формат адреси електронної пошти!")
+      return;
+    }
+    if (login.length < 6) {
+      Alert.alert("Логін має бути довжиною мінімум 6 символів!!")
+      return
+    }
+    if (password.length < 6) {
+      Alert.alert("Пароль має бути довжиною мінімум 6 символів!!")
+      return
+    }
     console.log(
       `Логін - "${login}",адреса електронної пошти - "${email}", пароль - "${password}"`
     );
