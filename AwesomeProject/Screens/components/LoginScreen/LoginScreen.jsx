@@ -66,7 +66,7 @@ const LoginScreen = () => {
               onChangeText={setEmail}
               style={
                 focusEmail
-                  ? [styles.focusedTextInput, styles.textInput]
+                  ? [styles.textInput, styles.focusedTextInput]
                   : styles.textInput
               }
               placeholder="Адреса електронної пошти"
@@ -84,7 +84,7 @@ const LoginScreen = () => {
                 onChangeText={setPassword}
                 style={
                   focusPassword
-                    ? [styles.focusedTextInput, styles.textInput]
+                    ? [styles.textInput, styles.focusedTextInput]
                     : styles.textInput
                 }
                 placeholder="Пароль"
@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   focusedTextInput: {
+    backgroundColor: "#fff",
     borderColor: "#ff6c00",
     borderWidth: 1,
   },
