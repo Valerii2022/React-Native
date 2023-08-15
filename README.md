@@ -66,7 +66,9 @@ RegistrationScreen за допомогою компонента createStackNavig
 8 - З RegistrationScreen можна перейти на LoginScreen, натиснувши на текст Увійти
 
 9 - З LoginScreen можна перейти на RegistrationScreen, натиснувши на текст Зареєструватися
+
 10 - Після сабміту в LoginScreen, RegistrationScreen перекидає на Home, де відразу показується екран PostsScreen
+
 11 - Підключити нижню навігацію, використовуючи createBottomTabNavigator
 
 12 - У нижній навігації створити 3 переходи.
