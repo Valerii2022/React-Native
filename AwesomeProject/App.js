@@ -8,22 +8,23 @@ import { StyleSheet, Text, View } from "react-native";
 import PostsScreen from "./Screens/PostsScreen/PostsScreen";
 import RegistrationScreen from "./Screens/components/RegistrationScreen/RegistrationScreen";
 import Home from "./Screens/components/HomeScreen/HomeScreen";
+import CreatePostsScreen from "./Screens/CreatePostsScreen/CreatePostsScreen";
 
-const MainStack = createStackNavigator();
+// const MainStack = createStackNavigator();
 
 export default function App() {
-  return (
-    <NavigationContainer>
-      <MainStack.Navigator initialRouteName="Login">
-        <MainStack.Screen name="Registration" component={RegistrationScreen} />
-        <MainStack.Screen name="Login" component={LoginScreen} />
-        <MainStack.Screen name="Home" component={Home} />
-      </MainStack.Navigator>
-    </NavigationContainer>
-  );
+  // return (
+  //   <NavigationContainer>
+  //     <MainStack.Navigator initialRouteName="Login">
+  //       <MainStack.Screen name="Registration" component={RegistrationScreen} />
+  //       <MainStack.Screen name="Login" component={LoginScreen} />
+  //       <MainStack.Screen name="Home" component={Home} />
+  //     </MainStack.Navigator>
+  //   </NavigationContainer>
+  // );
   // return <LoginScreen />;
   // return <RegistrationScreen />;
-  // return <PostsScreen />;
+  return <CreatePostsScreen />;
   // return <Home />;
   // return (
   //   <View style={styles.container}>
