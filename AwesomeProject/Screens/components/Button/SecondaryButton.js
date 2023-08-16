@@ -1,18 +1,8 @@
 import { Text, Pressable, StyleSheet } from "react-native";
-
-export const Button = (props) => {
+const SecondaryButton = (props) => {
   const { onPress, title = "Save" } = props;
   return (
     <Pressable style={styles.button} onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
-    </Pressable>
-  );
-};
-
-export const SecondaryButton = (props) => {
-  const { onPress, title = "Save" } = props;
-  return (
-    <Pressable style={[styles.button, styles.secondary]} onPress={onPress}>
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   );
@@ -26,15 +16,13 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 100,
     elevation: 3,
-    backgroundColor: "#FF6C00",
+    backgroundColor: "#f6f6f6",
   },
   text: {
     fontSize: 16,
     lineHeight: 18.75,
-    color: "#fff",
-  },
-  secondary: {
     color: "#bdbdbd",
-    backgroundColor: "#f6f6f6",
   },
 });
+
+export default SecondaryButton;

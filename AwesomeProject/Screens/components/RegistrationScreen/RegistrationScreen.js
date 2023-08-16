@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   StyleSheet,
   View,
+  Image,
   ImageBackground,
   Text,
   TextInput,
@@ -10,19 +11,21 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
-import Button from "../components/Button/Button";
+import Button from "../Button/Button";
 
-const LoginScreen = ({ navigation }) => {
+const RegistrationScreen = ({ navigation }) => {
+  const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passSecure, setPassSecure] = useState(true);
+  const [focusLogin, setFocusLogin] = useState(false);
   const [focusEmail, setFocusEmail] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
 
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
-  const onLogin = () => {
-    if (email === "" || password === "") {
+  const signIn = () => {
+    if (login === "" || email === "" || password === "") {
       Alert.alert("Всі поля обов'язкові для заповнення!");
       return;
     }
@@ -30,15 +33,21 @@ const LoginScreen = ({ navigation }) => {
       Alert.alert("Невірний формат адреси електронної пошти!");
       return;
     }
+    if (login.length < 6) {
+      Alert.alert("Логін має бути довжиною мінімум 6 символів!!");
+      return;
+    }
     if (password.length < 6) {
-      Alert.alert("Пароль має бути довжиною мінімум 6 символів!");
+      Alert.alert("Пароль має бути довжиною мінімум 6 символів!!");
       return;
     }
     console.log(
-      `Адреса електронної пошти - "${email}", пароль - "${password}"`
+      `Логін - "${login}",адреса електронної пошти - "${email}", пароль - "${password}"`
     );
+    setLogin("");
     setEmail("");
     setPassword("");
+    navigation.navigate("Home");
   };
 
   return (
@@ -46,15 +55,37 @@ const LoginScreen = ({ navigation }) => {
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS == "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={-208}
+        keyboardVerticalOffset={-142}
       >
         <ImageBackground
-          source={require("../../assets/images/BG.png")}
+          source={require("../../../assets/images/BG.png")}
           resizeMode="cover"
           style={styles.image}
         >
-          <View style={styles.loginContainer}>
-            <Text style={styles.title}>Увійти</Text>
+          <View style={styles.registrationContainer}>
+            <View style={styles.avatar}>
+              <Image
+                style={styles.addIcon}
+                source={require("../../../assets/images/add.png")}
+              />
+            </View>
+            <Text style={styles.title}>Реєстрація</Text>
+            <TextInput
+              onFocus={() => {
+                setFocusLogin(true);
+              }}
+              onBlur={() => {
+                setFocusLogin(false);
+              }}
+              value={login}
+              onChangeText={setLogin}
+              style={
+                focusLogin
+                  ? [styles.textInput, styles.focusedTextInput]
+                  : styles.textInput
+              }
+              placeholder="Логін"
+            ></TextInput>
             <TextInput
               onFocus={() => {
                 setFocusEmail(true);
@@ -79,9 +110,9 @@ const LoginScreen = ({ navigation }) => {
                 onBlur={() => {
                   setFocusPassword(false);
                 }}
-                secureTextEntry={passSecure}
                 value={password}
                 onChangeText={setPassword}
+                secureTextEntry={passSecure}
                 style={
                   focusPassword
                     ? [styles.textInput, styles.focusedTextInput]
@@ -99,16 +130,16 @@ const LoginScreen = ({ navigation }) => {
               </Text>
             </View>
             <View style={styles.btnWrap}>
-              <Button title={"Увійти"} onPress={onLogin} />
+              <Button title={"Увійти"} onPress={signIn} />
             </View>
             <Text style={styles.text}>
-              Немає акаунту?
+              Вже є акаунт?
               <Text
                 style={styles.textLink}
-                onPress={() => navigation.navigate("Registration")}
+                onPress={() => navigation.navigate("Login")}
               >
                 {" "}
-                Зареєстуватися
+                Увійти
               </Text>
             </Text>
           </View>
@@ -126,13 +157,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
-  loginContainer: {
+  avatar: {
+    width: 120,
+    height: 120,
+    backgroundColor: "#f6f6f6",
+    borderRadius: 16,
+    position: "absolute",
+    top: -60,
+    left: "50%",
+    transform: [{ translateX: -50 }],
+  },
+  addIcon: {
+    position: "absolute",
+    bottom: 14,
+    right: -12,
+  },
+  registrationContainer: {
     width: "100%",
-    height: 455,
+    height: 515,
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    paddingTop: 32,
+    paddingTop: 92,
     paddingLeft: 16,
     paddingRight: 16,
     marginTop: "auto",
@@ -177,9 +223,10 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   inputLink: {
+    padding: 10,
     position: "absolute",
-    right: 16,
-    top: 16,
+    right: 6,
+    top: 6,
     color: "#1B4371",
     fontFamily: "Roboto",
     fontSize: 16,
@@ -193,4 +240,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RegistrationScreen;

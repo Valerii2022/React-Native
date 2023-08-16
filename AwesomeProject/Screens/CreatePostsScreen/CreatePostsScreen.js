@@ -1,43 +1,62 @@
 import React from "react";
-import { StyleSheet, View, Text, Image, TextInput } from "react-native";
-import { SecondaryButton } from "../components/Button/Button";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TextInput,
+  ScrollView,
+} from "react-native";
+import SecondaryButton from "../components/Button/SecondaryButton";
 
 const CreatePostsScreen = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          style={styles.goBack}
-          source={require("../../assets/images/arrow-left.png")}
-        />
-        <Text style={styles.headerTitle}>Створити публікацію</Text>
-      </View>
-      <View style={styles.main}>
-        <View style={styles.photoWrapper}>
-          <View style={styles.cameraIconWrap}>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Image
+            style={styles.goBack}
+            source={require("../../assets/images/arrow-left.png")}
+          />
+          <Text style={styles.headerTitle}>Створити публікацію</Text>
+        </View>
+        <View style={styles.main}>
+          <View style={styles.photoWrapper}>
+            <View style={styles.cameraIconWrap}>
+              <Image
+                style={styles.cameraIcon}
+                source={require("../../assets/images/camera.png")}
+              />
+            </View>
+          </View>
+          <Text style={styles.photoAction}>Завантажте фото</Text>
+          <TextInput style={styles.input} placeholder="Назва..."></TextInput>
+          <View style={styles.inputLocationWrap}>
             <Image
-              style={styles.cameraIcon}
-              source={require("../../assets/images/camera.png")}
+              style={styles.inputIcon}
+              source={require("../../assets/images/map-pin.png")}
+            />
+            <TextInput
+              style={[styles.input, styles.inputLocation]}
+              placeholder="Місцевість..."
+            ></TextInput>
+          </View>
+          <View style={styles.publishBtnWrap}>
+            <SecondaryButton title={"Опублікувати"} />
+          </View>
+        </View>
+
+        <View style={styles.footer}>
+          <View style={styles.btnWrap}>
+            <SecondaryButton title={""} />
+            <Image
+              style={styles.btnIcon}
+              source={require("../../assets/images/trash.png")}
             />
           </View>
         </View>
-        <Text style={styles.photoAction}>Завантажте фото</Text>
-        <TextInput style={styles.input} placeholder="Назва..."></TextInput>
-        <TextInput style={styles.input} placeholder="Місцевість..."></TextInput>
-        <View style={styles.publishBtnWrap}>
-          <SecondaryButton title={"Опублікувати"} />
-        </View>
       </View>
-      <View style={styles.footer}>
-        <View style={styles.btnWrap}>
-          <SecondaryButton title={""} />
-          <Image
-            style={styles.btnIcon}
-            source={require("../../assets/images/trash.png")}
-          />
-        </View>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -71,31 +90,34 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingLeft: 16,
     paddingRight: 16,
-    paddingTop: 32,
   },
   photoWrapper: {
     width: "100%",
     height: 240,
-    backgroundColor: "#e8e8e8",
+    backgroundColor: "#f6f6f6",
     borderRadius: 8,
     position: "relative",
     marginBottom: 8,
+    borderWidth: 1,
+    borderColor: "#e8e8e8",
   },
   cameraIconWrap: {
     width: 60,
     height: 60,
-    borderRadius: "50%",
+    backgroundColor: "#fff",
     position: "absolute",
     top: "50%",
     left: "50%",
-    transform: [{ translate: -50 }],
+    transform: [{ translateX: -30 }, { translateY: -30 }],
+    borderRadius: 100,
   },
   cameraIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    position: "absolute",
+    top: 18,
+    left: 18,
   },
   photoAction: {
+    fontFamily: "Roboto",
     fontSize: 16,
     color: "#bdbdbd",
     marginBottom: 32,
@@ -103,16 +125,30 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     height: 50,
-    backgroundColor: "#f6f6f6",
     color: "#bdbdbd",
     fontFamily: "Roboto",
     fontSize: 16,
     lineHeight: 18.75,
     padding: 16,
+    paddingLeft: 0,
     marginBottom: 16,
-    borderRadius: 8,
+    borderBottomColor: "#e8e8e8",
+    borderBottomWidth: 1,
   },
-  publishBtnWrap: {},
+  inputLocationWrap: {
+    position: "relative",
+  },
+  inputIcon: {
+    position: "absolute",
+    top: 13,
+  },
+  inputLocation: {
+    paddingLeft: 28,
+  },
+  publishBtnWrap: {
+    height: 50,
+    marginBottom: 120,
+  },
   footer: {
     flexDirection: "row",
     alignItems: "center",

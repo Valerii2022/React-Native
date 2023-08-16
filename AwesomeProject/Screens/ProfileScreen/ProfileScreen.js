@@ -1,12 +1,19 @@
 import React from "react";
-import { StyleSheet, View, Text, Image, ImageBackground } from "react-native";
-import { Button } from "../components/Button/Button";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  ImageBackground,
+  ScrollView,
+} from "react-native";
+import Button from "../components/Button/Button";
 
 const ProfileScreen = () => {
   return (
-    <View>
+    <ScrollView>
       <ImageBackground
-        source={require("../../../assets/images/BG.png")}
+        source={require("../../assets/images/BG.png")}
         resizeMode="cover"
         style={styles.image}
       >
@@ -14,8 +21,12 @@ const ProfileScreen = () => {
           <View style={styles.profileContainer}>
             <View style={styles.avatar}>
               <Image
-                style={styles.addIcon}
-                source={require("../../../assets/images/add.png")}
+                style={styles.photo}
+                source={require("../../assets/images/user-photo.jpg")}
+              />
+              <Image
+                style={styles.deleteIcon}
+                source={require("../../assets/images/delete.png")}
               />
             </View>
             <Image
@@ -23,7 +34,92 @@ const ProfileScreen = () => {
               source={require("../../assets/images/logout.png")}
             />
             <Text style={styles.title}>Natali Romanova</Text>
+            <View style={styles.postWrap}>
+              <Image
+                style={styles.postImage}
+                source={require("../../assets/images/img-1.jpg")}
+              />
+              <Text style={styles.postTitle}>Ліс</Text>
+              <View style={styles.postInfoWrap}>
+                <View style={styles.commentsWrap}>
+                  <Image
+                    style={styles.postImage}
+                    source={require("../../assets/images/comment-active.png")}
+                  />
+                  <Text style={styles.commentNumber}>8</Text>
+                  <Image
+                    style={styles.postImage}
+                    source={require("../../assets/images/like.png")}
+                  />
+                  <Text style={styles.commentNumber}>153</Text>
+                </View>
+                <View style={styles.locationWrap}>
+                  <Image
+                    style={styles.postImage}
+                    source={require("../../assets/images/map-pin.png")}
+                  />
+                  <Text style={styles.location}>Ukraine</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.postWrap}>
+              <Image
+                style={styles.postImage}
+                source={require("../../assets/images/img-2.jpg")}
+              />
+              <Text style={styles.postTitle}>Захід на Чорному морі</Text>
+              <View style={styles.postInfoWrap}>
+                <View style={styles.commentsWrap}>
+                  <Image
+                    style={styles.postImage}
+                    source={require("../../assets/images/comment-active.png")}
+                  />
+                  <Text style={styles.commentNumber}>3</Text>
+                  <Image
+                    style={styles.postImage}
+                    source={require("../../assets/images/like.png")}
+                  />
+                  <Text style={styles.commentNumber}>200</Text>
+                </View>
+                <View style={styles.locationWrap}>
+                  <Image
+                    style={styles.postImage}
+                    source={require("../../assets/images/map-pin.png")}
+                  />
+                  <Text style={styles.location}>Ukraine</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.postWrap}>
+              <Image
+                style={styles.postImage}
+                source={require("../../assets/images/img-3.jpg")}
+              />
+              <Text style={styles.postTitle}>Старий будиночок у венеції</Text>
+              <View style={styles.postInfoWrap}>
+                <View style={styles.commentsWrap}>
+                  <Image
+                    style={styles.postImage}
+                    source={require("../../assets/images/comment-active.png")}
+                  />
+                  <Text style={styles.commentNumber}>50</Text>
+                  <Image
+                    style={styles.postImage}
+                    source={require("../../assets/images/like.png")}
+                  />
+                  <Text style={styles.commentNumber}>200</Text>
+                </View>
+                <View style={styles.locationWrap}>
+                  <Image
+                    style={styles.postImage}
+                    source={require("../../assets/images/map-pin.png")}
+                  />
+                  <Text style={styles.location}>Italy</Text>
+                </View>
+              </View>
+            </View>
           </View>
+
           <View style={styles.footer}>
             <Image
               style={styles.footerIcon}
@@ -43,14 +139,14 @@ const ProfileScreen = () => {
           </View>
         </View>
       </ImageBackground>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 44,
+    paddingTop: 147,
     flexDirection: "column",
     minHeight: "100%",
   },
@@ -68,21 +164,25 @@ const styles = StyleSheet.create({
     left: "50%",
     transform: [{ translateX: -50 }],
   },
-  addIcon: {
+  photo: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
+  },
+  deleteIcon: {
     position: "absolute",
-    bottom: 14,
-    right: -12,
+    bottom: 8,
+    right: -18,
   },
   profileContainer: {
     flexGrow: 1,
     width: "100%",
-    height: 515,
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingTop: 92,
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingLeft: 8,
+    paddingRight: 8,
     marginTop: "auto",
     marginBottom: 0,
   },
@@ -97,12 +197,54 @@ const styles = StyleSheet.create({
     letterSpacing: 0.01,
     color: "#212121",
   },
-  logOut: {},
+  logOut: {
+    position: "absolute",
+    top: 22,
+    right: 16,
+  },
+  postWrap: {
+    marginBottom: 34,
+  },
+  postImage: {
+    marginBottom: 8,
+  },
+  postTitle: {
+    color: "#212121",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 8,
+  },
+  postInfoWrap: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  commentsWrap: {
+    flexDirection: "row",
+  },
+  commentNumber: {
+    color: "#212121",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    marginLeft: 6,
+    marginRight: 24,
+  },
+  locationWrap: {
+    flexDirection: "row",
+  },
+  location: {
+    color: "#212121",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    marginLeft: 6,
+    textDecorationLine: "underline",
+  },
   footer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 31,
+    backgroundColor: "#fff",
     borderTopColor: "#b3b3b3",
     borderTopWidth: 1,
     paddingTop: 9,

@@ -1,47 +1,99 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
-import { Button } from "../components/Button/Button";
+import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
+import Button from "../components/Button/Button";
 
 const PostsScreen = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Публікації</Text>
-        <Image
-          style={styles.logOut}
-          source={require("../../assets/images/logout.png")}
-        />
-      </View>
-      <View style={styles.main}>
-        <View style={styles.user}>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Публікації</Text>
           <Image
-            style={styles.userAvatar}
-            source={require("../../assets/images/user.jpg")}
+            style={styles.logOut}
+            source={require("../../assets/images/logout.png")}
           />
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>Natali Romanova</Text>
-            <Text style={styles.userEmail}>email@example.com</Text>
+        </View>
+        <View style={styles.main}>
+          <View style={styles.user}>
+            <Image
+              style={styles.userAvatar}
+              source={require("../../assets/images/user.jpg")}
+            />
+            <View style={styles.userInfo}>
+              <Text style={styles.userName}>Natali Romanova</Text>
+              <Text style={styles.userEmail}>email@example.com</Text>
+            </View>
+          </View>
+          <View style={styles.postWrap}>
+            <Image
+              style={styles.postImage}
+              source={require("../../assets/images/img-1.jpg")}
+            />
+            <Text style={styles.postTitle}>Ліс</Text>
+            <View style={styles.postInfoWrap}>
+              <View style={styles.commentsWrap}>
+                <Image
+                  style={styles.postImage}
+                  source={require("../../assets/images/comment.png")}
+                />
+                <Text style={styles.commentNumber}>0</Text>
+              </View>
+              <View style={styles.locationWrap}>
+                <Image
+                  style={styles.postImage}
+                  source={require("../../assets/images/map-pin.png")}
+                />
+                <Text style={styles.location}>
+                  Ivano-Frankivs'k Region, Ukraine
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.postWrap}>
+            <Image
+              style={styles.postImage}
+              source={require("../../assets/images/img-2.jpg")}
+            />
+            <Text style={styles.postTitle}>Ліс</Text>
+            <View style={styles.postInfoWrap}>
+              <View style={styles.commentsWrap}>
+                <Image
+                  style={styles.postImage}
+                  source={require("../../assets/images/comment.png")}
+                />
+                <Text style={styles.commentNumber}>0</Text>
+              </View>
+              <View style={styles.locationWrap}>
+                <Image
+                  style={styles.postImage}
+                  source={require("../../assets/images/map-pin.png")}
+                />
+                <Text style={styles.location}>
+                  Ivano-Frankivs'k Region, Ukraine
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.footer}>
-        <Image
-          style={styles.footerIcon}
-          source={require("../../assets/images/grid.png")}
-        />
-        <View style={styles.btnWrap}>
-          <Button title={""} />
+        <View style={styles.footer}>
           <Image
-            style={styles.btnIcon}
-            source={require("../../assets/images/Union.png")}
+            style={styles.footerIcon}
+            source={require("../../assets/images/grid.png")}
+          />
+          <View style={styles.btnWrap}>
+            <Button title={""} />
+            <Image
+              style={styles.btnIcon}
+              source={require("../../assets/images/Union.png")}
+            />
+          </View>
+          <Image
+            style={styles.footerIcon}
+            source={require("../../assets/images/user.png")}
           />
         </View>
-        <Image
-          style={styles.footerIcon}
-          source={require("../../assets/images/user.png")}
-        />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -73,12 +125,13 @@ const styles = StyleSheet.create({
   },
   main: {
     flexGrow: 1,
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   user: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 32,
   },
   userAvatar: {
     borderRadius: 16,
@@ -98,6 +151,42 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 13,
     color: "#212121",
+  },
+  postWrap: {
+    marginBottom: 34,
+  },
+  postImage: {
+    marginBottom: 8,
+  },
+  postTitle: {
+    color: "#212121",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 8,
+  },
+  postInfoWrap: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  commentsWrap: {
+    flexDirection: "row",
+  },
+  commentNumber: {
+    color: "#bdbdbd",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    marginLeft: 6,
+  },
+  locationWrap: {
+    flexDirection: "row",
+  },
+  location: {
+    color: "#212121",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    marginLeft: 6,
+    textDecorationLine: "underline",
   },
   footer: {
     flexDirection: "row",

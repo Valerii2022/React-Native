@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
+import Button from "../components/Button/Button";
 
 const MapScreen = () => {
   return (
@@ -12,7 +13,23 @@ const MapScreen = () => {
         <Text style={styles.headerTitle}>Карта</Text>
       </View>
       <View style={styles.main}></View>
-      <View style={styles.footer}></View>
+      <View style={styles.footer}>
+        <Image
+          style={styles.footerIcon}
+          source={require("../../assets/images/grid.png")}
+        />
+        <View style={styles.btnWrap}>
+          <Button title={""} />
+          <Image
+            style={styles.btnIcon}
+            source={require("../../assets/images/Union.png")}
+          />
+        </View>
+        <Image
+          style={styles.footerIcon}
+          source={require("../../assets/images/user.png")}
+        />
+      </View>
     </View>
   );
 };
@@ -52,8 +69,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    gap: 31,
+    borderTopColor: "#b3b3b3",
+    borderTopWidth: 1,
     paddingTop: 9,
     paddingBottom: 34,
+  },
+  btnWrap: {
+    width: 70,
+    height: 40,
+  },
+  btnIcon: {
+    position: "absolute",
+    right: 28,
+    top: 13,
   },
 });
 
