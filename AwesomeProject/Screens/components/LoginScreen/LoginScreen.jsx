@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import Button from "../Button/Button";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passSecure, setPassSecure] = useState(true);
@@ -103,7 +103,7 @@ const LoginScreen = () => {
             </View>
             <Text style={styles.text}>
               Немає акаунту?
-              <Text style={styles.textLink}> Зареєстуватися</Text>
+              <Text style={styles.textLink} onPress={() => navigation.navigate("Registration")}> Зареєстуватися</Text>
             </Text>
           </View>
         </ImageBackground>
