@@ -3,12 +3,17 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
-import LoginScreen from "./Screens/components/LoginScreen/LoginScreen";
+
 import { StyleSheet, Text, View } from "react-native";
-import PostsScreen from "./Screens/PostsScreen/PostsScreen";
-import RegistrationScreen from "./Screens/components/RegistrationScreen/RegistrationScreen";
-import Home from "./Screens/components/HomeScreen/HomeScreen";
+
+import CommentsScreen from "./Screens/CommentsScreen/CommentsScreen";
 import CreatePostsScreen from "./Screens/CreatePostsScreen/CreatePostsScreen";
+import Home from "./Screens/HomeScreen/HomeScreen";
+import LoginScreen from "./Screens/LoginScreen/LoginScreen";
+import MapScreen from "./Screens/MapScreen/MapScreen";
+import PostsScreen from "./Screens/PostsScreen/PostsScreen";
+import ProfileScreen from "./Screens/ProfileScreen/ProfileScreen";
+import RegistrationScreen from "./Screens/RegistrationScreen/RegistrationScreen";
 
 // const MainStack = createStackNavigator();
 
@@ -22,10 +27,16 @@ export default function App() {
   //     </MainStack.Navigator>
   //   </NavigationContainer>
   // );
-  // return <LoginScreen />;
-  // return <RegistrationScreen />;
+
+  // return <CommentsScreen />;
   return <CreatePostsScreen />;
   // return <Home />;
+  // return <LoginScreen />;
+  // return <MapScreen />;
+  // return <PostsScreen />;
+  // return <ProfileScreen />;
+  // return <RegistrationScreen />;
+
   // return (
   //   <View style={styles.container}>
   //     <Text>Open up App.js to start working on your app!</Text>

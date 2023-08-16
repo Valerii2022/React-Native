@@ -1,8 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
-import { SecondaryButton } from "../components/Button/Button";
 
-const CreatePostsScreen = () => {
+const MapScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -10,18 +9,10 @@ const CreatePostsScreen = () => {
           style={styles.goBack}
           source={require("../../assets/images/arrow-left.png")}
         />
-        <Text style={styles.headerTitle}>Створити публікацію</Text>
+        <Text style={styles.headerTitle}>Карта</Text>
       </View>
       <View style={styles.main}></View>
-      <View style={styles.footer}>
-        <View style={styles.btnWrap}>
-          <SecondaryButton style={styles.btn} title={""} />
-          <Image
-            style={styles.btnIcon}
-            source={require("../../assets/images/trash.png")}
-          />
-        </View>
-      </View>
+      <View style={styles.footer}></View>
     </View>
   );
 };
@@ -64,18 +55,6 @@ const styles = StyleSheet.create({
     paddingTop: 9,
     paddingBottom: 34,
   },
-  btnWrap: {
-    width: 70,
-    height: 40,
-  },
-  btn: {
-    backgroundColor: "#bdbdbd",
-  },
-  btnIcon: {
-    position: "absolute",
-    right: 23,
-    top: 8,
-  },
 });
 
-export default CreatePostsScreen;
+export default MapScreen;
