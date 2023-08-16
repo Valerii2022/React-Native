@@ -8,9 +8,9 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert
+  Alert,
 } from "react-native";
-import Button from "../Button/Button";
+import Button from "../components/Button/Button";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -22,17 +22,17 @@ const LoginScreen = ({ navigation }) => {
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
   const onLogin = () => {
-    if(email === "" || password === ""){
-      Alert.alert("Всі поля обов'язкові для заповнення!")
+    if (email === "" || password === "") {
+      Alert.alert("Всі поля обов'язкові для заповнення!");
       return;
     }
     if (reg.test(email) === false) {
-      Alert.alert("Невірний формат адреси електронної пошти!")
+      Alert.alert("Невірний формат адреси електронної пошти!");
       return;
     }
     if (password.length < 6) {
-      Alert.alert("Пароль має бути довжиною мінімум 6 символів!")
-      return
+      Alert.alert("Пароль має бути довжиною мінімум 6 символів!");
+      return;
     }
     console.log(
       `Адреса електронної пошти - "${email}", пароль - "${password}"`
@@ -49,7 +49,7 @@ const LoginScreen = ({ navigation }) => {
         keyboardVerticalOffset={-208}
       >
         <ImageBackground
-          source={require("../../../assets/images/BG.png")}
+          source={require("../../assets/images/BG.png")}
           resizeMode="cover"
           style={styles.image}
         >
@@ -103,7 +103,13 @@ const LoginScreen = ({ navigation }) => {
             </View>
             <Text style={styles.text}>
               Немає акаунту?
-              <Text style={styles.textLink} onPress={() => navigation.navigate("Registration")}> Зареєстуватися</Text>
+              <Text
+                style={styles.textLink}
+                onPress={() => navigation.navigate("Registration")}
+              >
+                {" "}
+                Зареєстуватися
+              </Text>
             </Text>
           </View>
         </ImageBackground>

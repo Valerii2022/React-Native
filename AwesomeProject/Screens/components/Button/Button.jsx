@@ -18,8 +18,6 @@ export const SecondaryButton = (props) => {
   );
 };
 
-
-
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
@@ -29,7 +27,6 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     elevation: 3,
     backgroundColor: "#FF6C00",
-    
   },
   text: {
     fontSize: 16,
@@ -37,7 +34,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   secondary: {
+    color: "#bdbdbd",
     backgroundColor: "#f6f6f6",
-  }
+  },
 });
-

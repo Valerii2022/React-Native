@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
-import {Button} from "../components/Button/Button";
+import { Button } from "../components/Button/Button";
 
 const PostsScreen = () => {
   return (
