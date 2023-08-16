@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingLeft: 16,
     paddingRight: 16,
+    paddingTop: 32,
   },
   photoWrapper: {
     width: "100%",
