@@ -12,8 +12,9 @@ import {
   Alert,
 } from "react-native";
 import Button from "../Button/Button";
+import { useNavigation } from "@react-navigation/native";
 
-const RegistrationScreen = ({ navigation }) => {
+const RegistrationScreen = () => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,6 +22,8 @@ const RegistrationScreen = ({ navigation }) => {
   const [focusLogin, setFocusLogin] = useState(false);
   const [focusEmail, setFocusEmail] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
+
+  const navigation = useNavigation();
 
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 

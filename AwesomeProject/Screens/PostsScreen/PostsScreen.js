@@ -1,18 +1,23 @@
 import React from "react";
 import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
 import Button from "../components/Button/Button";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import CreatePostsScreen from "../CreatePostsScreen/CreatePostsScreen";
+import ProfileScreen from "../ProfileScreen/ProfileScreen";
+
+const Tabs = createBottomTabNavigator();
 
 const PostsScreen = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.header}>
+        {/* <View style={styles.header}>
           <Text style={styles.headerTitle}>Публікації</Text>
           <Image
             style={styles.logOut}
             source={require("../../assets/images/logout.png")}
           />
-        </View>
+        </View> */}
         <View style={styles.main}>
           <View style={styles.user}>
             <Image
@@ -75,7 +80,7 @@ const PostsScreen = () => {
             </View>
           </View>
         </View>
-        <View style={styles.footer}>
+        {/* <View style={styles.footer}>
           <Image
             style={styles.footerIcon}
             source={require("../../assets/images/grid.png")}
@@ -91,7 +96,16 @@ const PostsScreen = () => {
             style={styles.footerIcon}
             source={require("../../assets/images/user.png")}
           />
-        </View>
+        </View> */}
+        <Tabs.Navigator>
+          <Tabs.Screen
+            style={styles.tab}
+            name="Posts"
+            component={PostsScreen}
+          />
+          <Tabs.Screen name="CreatePosts" component={CreatePostsScreen} />
+          <Tabs.Screen name="Profile" component={ProfileScreen} />
+        </Tabs.Navigator>
       </View>
     </ScrollView>
   );
@@ -99,7 +113,8 @@ const PostsScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 44,
+    backgroundColor: "#fff",
+    paddingTop: 32,
     flexDirection: "column",
     minHeight: "100%",
   },
