@@ -25,37 +25,44 @@ export default function App() {
         <MainStack.Screen
           name="Registration"
           component={RegistrationScreen}
-          options={{ title: "Реєстрація" }}
+          options={{
+            headerShown: false,
+          }}
         />
         <MainStack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ title: "Увійти" }}
+          options={{
+            headerShown: false,
+          }}
         />
         <MainStack.Screen
           name="Home"
-          component={PostsScreen}
+          component={Home}
+          // options={{
+          //   title: "Публікації",
+          //   headerStyle: {
+          //     borderBottomColor: "#b3b3b3",
+          //     borderBottomWidth: 1,
+          //   },
+          //   headerTintColor: "#212121",
+          //   headerTitleStyle: {
+          //     fontFamily: "Roboto",
+          //     fontSize: 17,
+          //     fontWeight: 500,
+          //     lineHeight: 22,
+          //     letterSpacing: -0.41,
+          //     paddingLeft: 70,
+          //   },
+          //   headerRight: () => (
+          //     <Image
+          //       style={styles.logOut}
+          //       source={require("./assets/images/logout.png")}
+          //     />
+          //   ),
+          // }}
           options={{
-            title: "Публікації",
-            headerStyle: {
-              borderBottomColor: "#b3b3b3",
-              borderBottomWidth: 1,
-            },
-            headerTintColor: "#212121",
-            headerTitleStyle: {
-              fontFamily: "Roboto",
-              fontSize: 17,
-              fontWeight: 500,
-              lineHeight: 22,
-              letterSpacing: -0.41,
-              paddingLeft: 70,
-            },
-            headerRight: () => (
-              <Image
-                style={styles.logOut}
-                source={require("./assets/images/logout.png")}
-              />
-            ),
+            headerShown: false,
           }}
         />
       </MainStack.Navigator>
@@ -87,7 +94,7 @@ const styles = StyleSheet.create({
   },
   logOut: { marginRight: 8 },
 });
-
+// ============================================================================================================================
 // import * as React from 'react';
 // import { Text, View, Button, TouchableOpacity } from 'react-native';
 // import { NavigationContainer } from '@react-navigation/native';

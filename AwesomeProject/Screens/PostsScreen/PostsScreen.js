@@ -1,23 +1,31 @@
 import React from "react";
-import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
-import Button from "../components/Button/Button";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CreatePostsScreen from "../CreatePostsScreen/CreatePostsScreen";
-import ProfileScreen from "../ProfileScreen/ProfileScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const Tabs = createBottomTabNavigator();
 
 const PostsScreen = () => {
+  const navigation = useNavigation();
   return (
     <ScrollView>
       <View style={styles.container}>
-        {/* <View style={styles.header}>
+        <View style={styles.header}>
           <Text style={styles.headerTitle}>Публікації</Text>
-          <Image
+          <Pressable
             style={styles.logOut}
-            source={require("../../assets/images/logout.png")}
-          />
-        </View> */}
+            onPress={() => navigation.navigate("Login")}
+          >
+            <Image source={require("../../assets/images/logout.png")} />
+          </Pressable>
+        </View>
         <View style={styles.main}>
           <View style={styles.user}>
             <Image
@@ -80,32 +88,6 @@ const PostsScreen = () => {
             </View>
           </View>
         </View>
-        <View style={styles.footer}>
-          <Image
-            style={styles.footerIcon}
-            source={require("../../assets/images/grid.png")}
-          />
-          <View style={styles.btnWrap}>
-            <Button title={""} />
-            <Image
-              style={styles.btnIcon}
-              source={require("../../assets/images/Union.png")}
-            />
-          </View>
-          <Image
-            style={styles.footerIcon}
-            source={require("../../assets/images/user.png")}
-          />
-        </View>
-        {/* <Tabs.Navigator>
-          <Tabs.Screen
-            style={styles.tab}
-            name="Posts"
-            component={PostsScreen}
-          />
-          <Tabs.Screen name="CreatePosts" component={CreatePostsScreen} />
-          <Tabs.Screen name="Profile" component={ProfileScreen} />
-        </Tabs.Navigator> */}
       </View>
     </ScrollView>
   );
@@ -135,8 +117,9 @@ const styles = StyleSheet.create({
   },
   logOut: {
     position: "absolute",
-    right: 10,
-    top: 10,
+    right: -10,
+    top: -10,
+    padding: 20,
   },
   main: {
     flexGrow: 1,
@@ -202,25 +185,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 6,
     textDecorationLine: "underline",
-  },
-  footer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 31,
-    borderTopColor: "#b3b3b3",
-    borderTopWidth: 1,
-    paddingTop: 9,
-    paddingBottom: 34,
-  },
-  btnWrap: {
-    width: 70,
-    height: 40,
-  },
-  btnIcon: {
-    position: "absolute",
-    right: 28,
-    top: 13,
   },
 });
 
