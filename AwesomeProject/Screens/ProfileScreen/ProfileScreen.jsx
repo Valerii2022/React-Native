@@ -8,7 +8,6 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import Button from "../components/Button/Button";
 import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
@@ -100,7 +99,7 @@ const ProfileScreen = () => {
                 style={styles.postImage}
                 source={require("../../assets/images/img-3.jpg")}
               />
-              <Text style={styles.postTitle}>Старий будиночок у венеції</Text>
+              <Text style={styles.postTitle}>Старий будиночок у Венеції</Text>
               <View style={styles.postInfoWrap}>
                 <View style={styles.commentsWrap}>
                   <Image
@@ -124,24 +123,6 @@ const ProfileScreen = () => {
               </View>
             </View>
           </View>
-
-          {/* <View style={styles.footer}>
-            <Image
-              style={styles.footerIcon}
-              source={require("../../assets/images/grid.png")}
-            />
-            <View style={styles.btnWrap}>
-              <Button title={""} />
-              <Image
-                style={styles.btnIcon}
-                source={require("../../assets/images/Union.png")}
-              />
-            </View>
-            <Image
-              style={styles.footerIcon}
-              source={require("../../assets/images/user.png")}
-            />
-          </View> */}
         </View>
       </ImageBackground>
     </ScrollView>

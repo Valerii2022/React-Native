@@ -9,15 +9,6 @@ const Button = (props) => {
   );
 };
 
-// export const SecondaryButton = (props) => {
-//   const { onPress, title = "Save" } = props;
-//   return (
-//     <Pressable style={[styles.button, styles.secondary]} onPress={onPress}>
-//       <Text style={[styles.text, styles.secondaryText]}>{title}</Text>
-//     </Pressable>
-//   );
-// };
-
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
@@ -33,12 +24,6 @@ const styles = StyleSheet.create({
     lineHeight: 18.75,
     color: "#fff",
   },
-  // secondary: {
-  //   backgroundColor: "#f6f6f6",
-  // },
-  // secondaryText: {
-  //   color: "#bdbdbd",
-  // },
 });
 
 export default Button;

@@ -84,8 +84,6 @@ const CommentsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 44,
-    // flexDirection: "column",
-    // minHeight: "100%",
   },
   header: {
     paddingTop: 11,
