@@ -6,18 +6,23 @@ import {
   Image,
   TextInput,
   ScrollView,
+  Pressable,
 } from "react-native";
 import SecondaryButton from "../components/Button/SecondaryButton";
+import { useNavigation } from "@react-navigation/native";
 
 const CreatePostsScreen = () => {
+  const navigation = useNavigation();
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Image
+          <Pressable
             style={styles.goBack}
-            source={require("../../assets/images/arrow-left.png")}
-          />
+            onPress={() => navigation.navigate("Posts")}
+          >
+            <Image source={require("../../assets/images/arrow-left.png")} />
+          </Pressable>
           <Text style={styles.headerTitle}>Створити публікацію</Text>
         </View>
         <View style={styles.main}>
@@ -65,6 +70,7 @@ const styles = StyleSheet.create({
     paddingTop: 44,
     flexDirection: "column",
     minHeight: "100%",
+    backgroundColor: "#fff",
   },
   header: {
     paddingTop: 11,
@@ -83,8 +89,9 @@ const styles = StyleSheet.create({
   },
   goBack: {
     position: "absolute",
-    left: 10,
-    top: 10,
+    left: -6,
+    top: -8,
+    padding: 20,
   },
   main: {
     flexGrow: 1,

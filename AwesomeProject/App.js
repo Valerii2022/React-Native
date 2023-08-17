@@ -25,12 +25,16 @@ export default function App() {
         <MainStack.Screen
           name="Registration"
           component={RegistrationScreen}
-          options={{ title: "Реєстрація" }}
+          options={{
+            headerShown: false,
+          }}
         />
         <MainStack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ title: "Увійти" }}
+          options={{
+            headerShown: false,
+          }}
         />
         <MainStack.Screen
           name="Home"
@@ -57,6 +61,9 @@ export default function App() {
           //     />
           //   ),
           // }}
+          options={{
+            headerShown: false,
+          }}
         />
       </MainStack.Navigator>
     </NavigationContainer>

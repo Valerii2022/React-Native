@@ -6,10 +6,13 @@ import {
   Image,
   ImageBackground,
   ScrollView,
+  Pressable,
 } from "react-native";
 import Button from "../components/Button/Button";
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
+  const navigation = useNavigation();
   return (
     <ScrollView>
       <ImageBackground
@@ -29,10 +32,12 @@ const ProfileScreen = () => {
                 source={require("../../assets/images/delete.png")}
               />
             </View>
-            <Image
+            <Pressable
               style={styles.logOut}
-              source={require("../../assets/images/logout.png")}
-            />
+              onPress={() => navigation.navigate("Login")}
+            >
+              <Image source={require("../../assets/images/logout.png")} />
+            </Pressable>
             <Text style={styles.title}>Natali Romanova</Text>
             <View style={styles.postWrap}>
               <Image
@@ -120,7 +125,7 @@ const ProfileScreen = () => {
             </View>
           </View>
 
-          <View style={styles.footer}>
+          {/* <View style={styles.footer}>
             <Image
               style={styles.footerIcon}
               source={require("../../assets/images/grid.png")}
@@ -136,7 +141,7 @@ const ProfileScreen = () => {
               style={styles.footerIcon}
               source={require("../../assets/images/user.png")}
             />
-          </View>
+          </View> */}
         </View>
       </ImageBackground>
     </ScrollView>
@@ -199,8 +204,9 @@ const styles = StyleSheet.create({
   },
   logOut: {
     position: "absolute",
-    top: 22,
-    right: 16,
+    top: 2,
+    right: -4,
+    padding: 20,
   },
   postWrap: {
     marginBottom: 34,
