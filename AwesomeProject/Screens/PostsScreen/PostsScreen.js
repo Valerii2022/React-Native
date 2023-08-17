@@ -80,7 +80,7 @@ const PostsScreen = () => {
             </View>
           </View>
         </View>
-        {/* <View style={styles.footer}>
+        <View style={styles.footer}>
           <Image
             style={styles.footerIcon}
             source={require("../../assets/images/grid.png")}
@@ -96,8 +96,8 @@ const PostsScreen = () => {
             style={styles.footerIcon}
             source={require("../../assets/images/user.png")}
           />
-        </View> */}
-        <Tabs.Navigator>
+        </View>
+        {/* <Tabs.Navigator>
           <Tabs.Screen
             style={styles.tab}
             name="Posts"
@@ -105,7 +105,7 @@ const PostsScreen = () => {
           />
           <Tabs.Screen name="CreatePosts" component={CreatePostsScreen} />
           <Tabs.Screen name="Profile" component={ProfileScreen} />
-        </Tabs.Navigator>
+        </Tabs.Navigator> */}
       </View>
     </ScrollView>
   );

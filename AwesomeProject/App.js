@@ -66,6 +66,7 @@ export default function App() {
   // return <Home />;
   // return <LoginScreen />;
   // return <MapScreen />;
+
   // return <PostsScreen />;
   // return <ProfileScreen />;
   // return <RegistrationScreen />;
