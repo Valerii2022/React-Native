@@ -6,17 +6,22 @@ import {
   Image,
   ScrollView,
   TextInput,
+  Pressable,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const CommentsScreen = () => {
+  const navigation = useNavigation();
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Image
+          <Pressable
             style={styles.goBack}
-            source={require("../../assets/images/arrow-left.png")}
-          />
+            onPress={() => navigation.navigate("Profile")}
+          >
+            <Image source={require("../../assets/images/arrow-left.png")} />
+          </Pressable>
           <Text style={styles.headerTitle}>Коментарі</Text>
         </View>
         <View style={styles.main}>
@@ -84,6 +89,7 @@ const CommentsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 44,
+    backgroundColor: "#fff",
   },
   header: {
     paddingTop: 11,
@@ -102,8 +108,9 @@ const styles = StyleSheet.create({
   },
   goBack: {
     position: "absolute",
-    left: 10,
-    top: 10,
+    left: -10,
+    top: -10,
+    padding: 20,
   },
   main: {
     paddingLeft: 8,

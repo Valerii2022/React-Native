@@ -46,10 +46,16 @@ const ProfileScreen = () => {
               <Text style={styles.postTitle}>Ліс</Text>
               <View style={styles.postInfoWrap}>
                 <View style={styles.commentsWrap}>
-                  <Image
-                    style={styles.postImage}
-                    source={require("../../assets/images/comment-active.png")}
-                  />
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate("Comments");
+                    }}
+                  >
+                    <Image
+                      style={styles.postImage}
+                      source={require("../../assets/images/comment-active.png")}
+                    />
+                  </Pressable>
                   <Text style={styles.commentNumber}>8</Text>
                   <Image
                     style={styles.postImage}
@@ -57,13 +63,16 @@ const ProfileScreen = () => {
                   />
                   <Text style={styles.commentNumber}>153</Text>
                 </View>
-                <View style={styles.locationWrap}>
+                <Pressable
+                  onPress={() => navigation.navigate("Maps")}
+                  style={styles.locationWrap}
+                >
                   <Image
                     style={styles.postImage}
                     source={require("../../assets/images/map-pin.png")}
                   />
                   <Text style={styles.location}>Ukraine</Text>
-                </View>
+                </Pressable>
               </View>
             </View>
             <View style={styles.postWrap}>
