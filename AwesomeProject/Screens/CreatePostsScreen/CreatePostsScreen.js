@@ -21,6 +21,7 @@ const CreatePostsScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [uriImage, setUriImage] = useState(null);
   const [location, setLocation] = useState(null);
   const [postName, setPostName] = useState("");
   const [postLocation, setPostLocation] = useState("");
@@ -53,10 +54,12 @@ const CreatePostsScreen = () => {
       longitude: location.coords.longitude,
     };
     setLocation(coords);
+    console.log(postName, postLocation, location, uriImage);
+    setLocation("");
+    setUriImage(null);
     setPostName("");
     setPostLocation("");
     navigation.navigate("Posts");
-    console.log(postName, postLocation, location);
   };
 
   return (
@@ -87,7 +90,7 @@ const CreatePostsScreen = () => {
                     }}
                   >
                     <Text
-                      style={{ fontSize: 18, marginBottom: 10, color: "red" }}
+                      style={{ fontSize: 18, marginBottom: 10, color: "white" }}
                     >
                       {" "}
                       Flip{" "}
@@ -99,6 +102,7 @@ const CreatePostsScreen = () => {
                       if (cameraRef) {
                         const { uri } = await cameraRef.takePictureAsync();
                         await MediaLibrary.createAssetAsync(uri);
+                        setUriImage(uri);
                       }
                     }}
                   >
