@@ -77,7 +77,12 @@ const CreatePostsScreen = () => {
         <View style={styles.main}>
           <View style={styles.photoWrapper}>
             <View style={styles.cameraContainer}>
-              <Camera style={styles.camera} type={type} ref={setCameraRef}>
+              <Camera
+                style={styles.camera}
+                type={type}
+                ref={setCameraRef}
+                ratio={"1:1"}
+              >
                 <View style={styles.photoView}>
                   <TouchableOpacity
                     style={styles.flipContainer}
@@ -89,12 +94,27 @@ const CreatePostsScreen = () => {
                       );
                     }}
                   >
-                    <Text
-                      style={{ fontSize: 18, marginBottom: 10, color: "white" }}
+                    <Image
+                      style={{
+                        width: 60,
+                        height: 60,
+                        marginTop: 10,
+                        marginRight: 10,
+                        opacity: 0.3,
+                      }}
+                      source={require("../../assets/images/flip2.png")}
+                    />
+                    {/* <Text
+                      style={{
+                        fontSize: 24,
+                        marginTop: 10,
+                        marginRight: 10,
+                        color: "white",
+                      }}
                     >
                       {" "}
                       Flip{" "}
-                    </Text>
+                    </Text> */}
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.button}
@@ -107,17 +127,16 @@ const CreatePostsScreen = () => {
                     }}
                   >
                     <View style={styles.takePhotoOut}>
-                      <View style={styles.takePhotoInner}></View>
+                      <View style={styles.takePhotoInner}>
+                        <Image
+                          style={styles.cameraIcon}
+                          source={require("../../assets/images/camera.png")}
+                        />
+                      </View>
                     </View>
                   </TouchableOpacity>
                 </View>
               </Camera>
-            </View>
-            <View style={styles.cameraIconWrap}>
-              <Image
-                style={styles.cameraIcon}
-                source={require("../../assets/images/camera.png")}
-              />
             </View>
           </View>
           <Text style={styles.photoAction}>Завантажте фото</Text>
@@ -190,38 +209,40 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
   },
-  cameraContainer: { flex: 1 },
-  camera: { flex: 1 },
+  cameraContainer: {
+    flex: 1,
+  },
+  camera: {
+    flex: 1,
+  },
   photoView: {
     flex: 1,
     backgroundColor: "transparent",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
   },
 
   flipContainer: {
-    flex: 0.1,
+    flex: 0.5,
     alignSelf: "flex-end",
   },
 
   button: { alignSelf: "center" },
 
   takePhotoOut: {
-    borderWidth: 2,
-    borderColor: "white",
-    height: 50,
-    width: 50,
+    height: 60,
+    width: 60,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 50,
+    top: 0,
+    left: 0,
   },
 
   takePhotoInner: {
-    borderWidth: 2,
-    borderColor: "white",
-    height: 40,
-    width: 40,
-    backgroundColor: "white",
+    height: 60,
+    width: 60,
+    backgroundColor: "rgba(255,255,255,0.3)",
     borderRadius: 50,
   },
   photoWrapper: {
@@ -229,6 +250,7 @@ const styles = StyleSheet.create({
     height: 240,
     backgroundColor: "#f6f6f6",
     borderRadius: 8,
+    overflow: "hidden",
     position: "relative",
     marginBottom: 8,
     borderWidth: 1,
@@ -237,7 +259,7 @@ const styles = StyleSheet.create({
   cameraIconWrap: {
     width: 60,
     height: 60,
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(255,255,255,0.3)",
     position: "absolute",
     top: "50%",
     left: "50%",
