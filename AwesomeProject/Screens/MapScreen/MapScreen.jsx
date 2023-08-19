@@ -1,51 +1,88 @@
-import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Dimensions,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import Button from "../components/Button/Button";
+import MapView, { Marker } from "react-native-maps";
+import * as Location from "expo-location";
+import { useNavigation } from "@react-navigation/native";
 
 const MapScreen = () => {
+  const [location, setLocation] = useState(null);
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      const coords = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+
+      setLocation(coords);
+    })();
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          style={styles.goBack}
-          source={require("../../assets/images/arrow-left.png")}
-        />
-        <Text style={styles.headerTitle}>Карта</Text>
-      </View>
-      <View style={styles.main}></View>
-      <View style={styles.footer}>
-        <Image
-          style={styles.footerIcon}
-          source={require("../../assets/images/grid.png")}
-        />
-        <View style={styles.btnWrap}>
-          <Button title={""} />
-          <Image
-            style={styles.btnIcon}
-            source={require("../../assets/images/Union.png")}
-          />
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Pressable
+            style={styles.goBack}
+            onPress={() => navigation.navigate("Profile")}
+          >
+            <Image source={require("../../assets/images/arrow-left.png")} />
+          </Pressable>
+          <Text style={styles.headerTitle}>Карта</Text>
         </View>
-        <Image
-          style={styles.footerIcon}
-          source={require("../../assets/images/user.png")}
-        />
+        <View style={styles.main}>
+          <MapView
+            style={styles.mapStyle}
+            region={{
+              ...location,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            showsUserLocation={true}
+          >
+            {location && (
+              <Marker
+                title="I am here"
+                coordinate={location}
+                description="Hello"
+              />
+            )}
+          </MapView>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#fff",
     paddingTop: 44,
     flexDirection: "column",
-    minHeight: "100%",
+    // minHeight: "100%",
   },
   header: {
     paddingTop: 11,
     paddingBottom: 11,
     borderBottomColor: "#b3b3b3",
     borderBottomWidth: 1,
-    marginBottom: 32,
   },
   headerTitle: {
     fontFamily: "Roboto",
@@ -57,13 +94,21 @@ const styles = StyleSheet.create({
   },
   goBack: {
     position: "absolute",
-    left: 10,
-    top: 10,
+    left: -10,
+    top: -10,
+    padding: 20,
   },
   main: {
-    flexGrow: 1,
-    paddingLeft: 16,
-    paddingRight: 16,
+    // flexGrow: 1,
+    padding: 16,
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  mapStyle: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   footer: {
     flexDirection: "row",

@@ -6,6 +6,8 @@ import { StyleSheet } from "react-native";
 import Home from "./Screens/HomeScreen/HomeScreen";
 import LoginScreen from "./Screens/components/LoginScreen/LoginScreen";
 import RegistrationScreen from "./Screens/components/RegistrationScreen/RegistrationScreen";
+import MapScreen from "./Screens/MapScreen/MapScreen";
+import CommentsScreen from "./Screens/CommentsScreen/CommentsScreen";
 
 const MainStack = createStackNavigator();
 
@@ -30,6 +32,20 @@ export default function App() {
         <MainStack.Screen
           name="Home"
           component={Home}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <MainStack.Screen
+          name="Maps"
+          component={MapScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <MainStack.Screen
+          name="Comments"
+          component={CommentsScreen}
           options={{
             headerShown: false,
           }}

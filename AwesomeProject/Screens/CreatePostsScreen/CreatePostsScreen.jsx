@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -7,12 +7,56 @@ import {
   TextInput,
   ScrollView,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import SecondaryButton from "../components/Button/SecondaryButton";
 import { useNavigation } from "@react-navigation/native";
+import { Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+import * as Location from "expo-location";
 
 const CreatePostsScreen = () => {
   const navigation = useNavigation();
+
+  const [hasPermission, setHasPermission] = useState(null);
+  const [cameraRef, setCameraRef] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [uriImage, setUriImage] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [postName, setPostName] = useState("");
+  const [postLocation, setPostLocation] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
+
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
+  const onPublish = async () => {
+    let location = await Location.getCurrentPositionAsync({});
+    const coords = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    };
+    setLocation(coords);
+    console.log(postName, postLocation, location, uriImage);
+    setLocation("");
+    setUriImage(null);
+    setPostName("");
+    setPostLocation("");
+    navigation.navigate("Posts");
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -27,30 +71,92 @@ const CreatePostsScreen = () => {
         </View>
         <View style={styles.main}>
           <View style={styles.photoWrapper}>
-            <View style={styles.cameraIconWrap}>
-              <Image
-                style={styles.cameraIcon}
-                source={require("../../assets/images/camera.png")}
-              />
+            <View style={styles.cameraContainer}>
+              <Camera
+                style={styles.camera}
+                type={type}
+                ref={setCameraRef}
+                ratio={"1:1"}
+              >
+                <View style={styles.photoView}>
+                  <TouchableOpacity
+                    style={styles.flipContainer}
+                    onPress={() => {
+                      setType(
+                        type === Camera.Constants.Type.back
+                          ? Camera.Constants.Type.front
+                          : Camera.Constants.Type.back
+                      );
+                    }}
+                  >
+                    <Image
+                      style={{
+                        width: 60,
+                        height: 60,
+                        marginTop: 10,
+                        marginRight: 10,
+                        opacity: 0.3,
+                      }}
+                      source={require("../../assets/images/flip2.png")}
+                    />
+                    {/* <Text
+                      style={{
+                        fontSize: 24,
+                        marginTop: 10,
+                        marginRight: 10,
+                        color: "white",
+                      }}
+                    >
+                      {" "}
+                      Flip{" "}
+                    </Text> */}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={async () => {
+                      if (cameraRef) {
+                        const { uri } = await cameraRef.takePictureAsync();
+                        await MediaLibrary.createAssetAsync(uri);
+                        setUriImage(uri);
+                      }
+                    }}
+                  >
+                    <View style={styles.takePhotoOut}>
+                      <View style={styles.takePhotoInner}>
+                        <Image
+                          style={styles.cameraIcon}
+                          source={require("../../assets/images/camera.png")}
+                        />
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </Camera>
             </View>
           </View>
           <Text style={styles.photoAction}>Завантажте фото</Text>
-          <TextInput style={styles.input} placeholder="Назва..."></TextInput>
+          <TextInput
+            value={postName}
+            onChangeText={setPostName}
+            style={styles.input}
+            placeholder="Назва..."
+          ></TextInput>
           <View style={styles.inputLocationWrap}>
             <Image
               style={styles.inputIcon}
               source={require("../../assets/images/map-pin.png")}
             />
             <TextInput
+              value={postLocation}
+              onChangeText={setPostLocation}
               style={[styles.input, styles.inputLocation]}
               placeholder="Місцевість..."
             ></TextInput>
           </View>
           <View style={styles.publishBtnWrap}>
-            <SecondaryButton title={"Опублікувати"} />
+            <SecondaryButton onPress={onPublish} title={"Опублікувати"} />
           </View>
         </View>
-
         <View style={styles.footer}>
           <View style={styles.btnWrap}>
             <SecondaryButton title={""} />
@@ -98,11 +204,48 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
   },
+  cameraContainer: {
+    flex: 1,
+  },
+  camera: {
+    flex: 1,
+  },
+  photoView: {
+    flex: 1,
+    backgroundColor: "transparent",
+    justifyContent: "flex-start",
+  },
+
+  flipContainer: {
+    flex: 0.5,
+    alignSelf: "flex-end",
+  },
+
+  button: { alignSelf: "center" },
+
+  takePhotoOut: {
+    height: 60,
+    width: 60,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 50,
+    top: 0,
+    left: 0,
+  },
+
+  takePhotoInner: {
+    height: 60,
+    width: 60,
+    backgroundColor: "rgba(255,255,255,0.3)",
+    borderRadius: 50,
+  },
   photoWrapper: {
     width: "100%",
     height: 240,
     backgroundColor: "#f6f6f6",
     borderRadius: 8,
+    overflow: "hidden",
     position: "relative",
     marginBottom: 8,
     borderWidth: 1,
@@ -111,7 +254,7 @@ const styles = StyleSheet.create({
   cameraIconWrap: {
     width: 60,
     height: 60,
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(255,255,255,0.3)",
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -132,7 +275,7 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     height: 50,
-    color: "#bdbdbd",
+    color: "#212121",
     fontFamily: "Roboto",
     fontSize: 16,
     lineHeight: 18.75,
