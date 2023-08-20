@@ -13,6 +13,8 @@ import {
 } from "react-native";
 import Button from "../Button/Button";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { add } from "../../../Redux/rootReducer";
 
 const RegistrationScreen = () => {
   const [login, setLogin] = useState("");
@@ -24,6 +26,7 @@ const RegistrationScreen = () => {
   const [focusPassword, setFocusPassword] = useState(false);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
@@ -47,6 +50,7 @@ const RegistrationScreen = () => {
     console.log(
       `Логін - "${login}",адреса електронної пошти - "${email}", пароль - "${password}"`
     );
+    () => dispatch(add());
     setLogin("");
     setEmail("");
     setPassword("");
