@@ -1,4 +1,4 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import {
   persistReducer,
   persistStore,
@@ -10,28 +10,16 @@ import {
   REGISTER,
 } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import rootReducer from "./rootReducer";
-
-const usersSlice = createSlice({
-  name: "users",
-  initialState: { users: [] },
-  reducers: {
-    add(state, action) {
-      console.log("hello");
-    },
-  },
-});
-
-// export const rootReducer = usersSlice.reducer;
+import { rootReducer } from "./rootReducer";
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
 };
 
-const reducer = persistReducer(persistConfig, usersSlice.reducer);
+const reducer = persistReducer(persistConfig, rootReducer);
 
-const store = configureStore({
+export const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -41,7 +29,4 @@ const store = configureStore({
     }),
 });
 
-const persistor = persistStore(store);
-
-// export const { add } = usersSlice.actions;
-export default { store, persistor };
+export const persistor = persistStore(store);

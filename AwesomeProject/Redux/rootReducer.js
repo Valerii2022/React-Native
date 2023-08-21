@@ -5,7 +5,11 @@ const usersSlice = createSlice({
   initialState: { users: [] },
   reducers: {
     add(state, action) {
-      console.log("hello");
+      state.users.push(action.payload);
+      console.log(state);
+    },
+    remove(state, action) {
+      console.log(state);
     },
   },
 });
@@ -14,4 +18,4 @@ export const rootReducer = usersSlice.reducer;
 export const { add } = usersSlice.actions;
 
 // Selectors
-// export const usersNames = (state) => state.users;
+export const usersNames = (state) => state.users;
