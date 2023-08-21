@@ -17,15 +17,10 @@ import {
   commentsReducer,
 } from "./rootReducer";
 
-const persistConfig = {
-  key: "root",
-  storage: AsyncStorage,
-};
-
 export const store = configureStore({
   reducer: {
     users: usersReducer,
-    auth: authReducer,
+    isAuth: authReducer,
     posts: postsReducer,
     comments: commentsReducer,
   },

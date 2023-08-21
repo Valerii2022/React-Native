@@ -13,16 +13,17 @@ import {
 } from "react-native";
 import Button from "../Button/Button";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   add,
   authorized,
   remove,
-  usersNames,
+  removeComment,
+  removePost,
+  unauthorized,
 } from "../../../Redux/rootReducer";
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
   onAuthStateChanged,
   updateProfile,
 } from "firebase/auth";
@@ -39,15 +40,14 @@ const RegistrationScreen = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const usersSelector = useSelector(usersNames);
 
   const registerDB = async ({ email, password }) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       updateUserProfile({ displayName: login });
-      navigation.navigate("Home");
-      dispatch(remove());
+      dispatch(add({ login, email, password }));
       dispatch(authorized());
+      navigation.navigate("Home");
     } catch (error) {
       Alert.alert("Помилка реєстрації");
       navigation.navigate("Registration");
@@ -55,22 +55,19 @@ const RegistrationScreen = () => {
     }
   };
 
-  // const authStateChanged = async (onChange = () => {}) => {
-  //   onAuthStateChanged((user) => {
-  //     onChange(user);
-  //   });
-  // };
+  async (onChange = () => {}) => {
+    onAuthStateChanged((user) => {
+      onChange(user);
+    });
+  };
 
   const updateUserProfile = async (update) => {
     const user = auth.currentUser;
-    // якщо такий користувач знайдений
     if (user) {
-      // оновлюємо його профайл
       try {
-        console.log(user);
+        console.log(auth.currentUser.displayName);
         await updateProfile(user, update);
       } catch (error) {
-        console.log("no user!");
         throw error;
       }
     }
@@ -99,6 +96,10 @@ const RegistrationScreen = () => {
     //   `Логін - "${login}",адреса електронної пошти - "${email}", пароль - "${password}"`
     // );
     registerDB({ email, password });
+    // dispatch(remove([]));
+    // dispatch(removePost());
+    // dispatch(unauthorized());
+    // dispatch(removeComment());
     setLogin("");
     setEmail("");
     setPassword("");

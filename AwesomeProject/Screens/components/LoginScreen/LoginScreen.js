@@ -35,7 +35,6 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const authSelector = useSelector(currentAuth);
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
   const loginDB = async ({ email, password }) => {

@@ -8,26 +8,26 @@ const usersSlice = createSlice({
   reducers: {
     add(state, action) {
       state.users.push(action.payload);
-      console.log("rootReducer", state);
+      console.log("usersReducer", state);
     },
     remove(state, action) {
       state.users = [];
-      console.log(state);
+      console.log("usersReducer", state);
     },
   },
 });
 
 const authSlice = createSlice({
-  name: "auth",
+  name: "isAuth",
   initialState: { isAuth: false },
   reducers: {
     authorized(state) {
       state.isAuth = true;
-      console.log("Auth reducer", state.isAuth);
+      console.log("Auth reducer", state);
     },
     unauthorized(state, action) {
       state.isAuth = false;
-      console.log("auth logout reducer", state.isAuth);
+      console.log("auth logout reducer", state);
     },
   },
 });
@@ -53,10 +53,11 @@ const commentsSlice = createSlice({
   reducers: {
     addComment(state, action) {
       state.comments.push(action.payload);
+      console.log("comments", state);
     },
     removeComment(state, action) {
       state.comments = [];
-      console.log("comments", state.posts);
+      console.log("comments", state);
     },
   },
 });
@@ -82,6 +83,6 @@ export const { addComment, removeComment } = commentsSlice.actions;
 
 // Selectors
 export const usersNames = (state) => state.users.users;
-export const currentAuth = (state) => state.auth.isAuth;
+export const currentAuth = (state) => state.isAuth.isAuth;
 export const posts = (state) => state.posts.posts;
 export const comments = (state) => state.comments.comments;

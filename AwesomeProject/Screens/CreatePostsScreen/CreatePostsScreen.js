@@ -10,16 +10,20 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../config";
 import SecondaryButton from "../components/Button/SecondaryButton";
 import { useNavigation } from "@react-navigation/native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 import { addPost, removePost } from "../../Redux/rootReducer";
+import { getAuth } from "firebase/auth";
 
 const CreatePostsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const user = getAuth();
 
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
@@ -45,6 +49,28 @@ const CreatePostsScreen = () => {
     return <Text>No access to camera</Text>;
   }
 
+  const writeDataToFirestore = async (
+    uid,
+    postName,
+    postLocation,
+    location,
+    uriImage
+  ) => {
+    try {
+      const docRef = await addDoc(collection(db, "posts"), {
+        uid,
+        postName,
+        postLocation,
+        location,
+        uriImage,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      throw e;
+    }
+  };
+
   const onPublish = async () => {
     let location = await Location.getCurrentPositionAsync({});
     const coords = {
@@ -53,7 +79,14 @@ const CreatePostsScreen = () => {
     };
     setLocation(coords);
     console.log(postName, postLocation, location, uriImage);
-    dispatch(removePost());
+    dispatch(addPost({ postName, postLocation, location, uriImage }));
+    writeDataToFirestore(
+      user.currentUser.uid,
+      postName,
+      postLocation,
+      location,
+      uriImage
+    );
     setLocation("");
     setUriImage(null);
     setPostName("");

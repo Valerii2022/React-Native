@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -8,28 +8,33 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import {
-  authorized,
-  unauthorized,
-  currentAuth,
-  usersNames,
-  posts,
-} from "../../Redux/rootReducer";
-import { auth } from "../../config";
+import { unauthorized } from "../../Redux/rootReducer";
 import { getAuth } from "firebase/auth";
-
-// const Tabs = createBottomTabNavigator();
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../config";
 
 const PostsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const currentUser = getAuth();
-  const allPosts = useSelector(posts);
+
+  const getDataFromFirestore = async () => {
+    try {
+      const snapshot = await getDocs(
+        collection(db, "posts"),
+        where("uid", "==", currentUser.currentUser.uid)
+      );
+      snapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()));
+
+      return snapshot.map((doc) => ({ id: doc.id, data: doc.data() }));
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const logout = () => {
-    console.log(allPosts);
+    console.log(getDataFromFirestore);
     dispatch(unauthorized());
     navigation.navigate("Login");
   };
