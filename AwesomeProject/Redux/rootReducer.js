@@ -10,7 +10,7 @@ const usersSlice = createSlice({
   },
 });
 
-export const rootReducer = usersSlice;
+export const rootReducer = usersSlice.reducer;
 export const { add } = usersSlice.actions;
 
 // Selectors

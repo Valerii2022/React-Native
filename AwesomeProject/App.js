@@ -16,49 +16,49 @@ const MainStack = createStackNavigator();
 
 export default function App() {
   return (
-    //  <Provider store={store}>
-    // {/* <PersistGate loading={null} persistor={persistor}> */}
-    <NavigationContainer>
-      <MainStack.Navigator initialRouteName="Login">
-        <MainStack.Screen
-          name="Registration"
-          component={RegistrationScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <MainStack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <MainStack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <MainStack.Screen
-          name="Maps"
-          component={MapScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <MainStack.Screen
-          name="Comments"
-          component={CommentsScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </MainStack.Navigator>
-    </NavigationContainer>
-    /* </PersistGate> */
-    //  </Provider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <MainStack.Navigator initialRouteName="Login">
+            <MainStack.Screen
+              name="Registration"
+              component={RegistrationScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <MainStack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <MainStack.Screen
+              name="Home"
+              component={Home}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <MainStack.Screen
+              name="Maps"
+              component={MapScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <MainStack.Screen
+              name="Comments"
+              component={CommentsScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </MainStack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
 }
 
