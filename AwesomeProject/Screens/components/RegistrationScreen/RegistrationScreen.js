@@ -15,6 +15,13 @@ import Button from "../Button/Button";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { add, remove, usersNames } from "../../../Redux/rootReducer";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../../../config";
 
 const RegistrationScreen = () => {
   const [login, setLogin] = useState("");
@@ -28,6 +35,14 @@ const RegistrationScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const selector = useSelector(usersNames);
+
+  const registerDB = async ({ email, password }) => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
@@ -51,8 +66,9 @@ const RegistrationScreen = () => {
     // console.log(
     //   `Логін - "${login}",адреса електронної пошти - "${email}", пароль - "${password}"`
     // );
+    registerDB({ email, password });
     dispatch(add({ login, email, password }));
-
+    // dispatch(remove());
     setLogin("");
     setEmail("");
     setPassword("");

@@ -12,6 +12,22 @@ import {
 } from "react-native";
 import Button from "../Button/Button";
 import { useNavigation } from "@react-navigation/native";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../../../config";
+
+const loginDB = async ({ email, password }) => {
+  try {
+    const credentials = await signInWithEmailAndPassword(auth, email, password);
+    return credentials.user;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -40,6 +56,7 @@ const LoginScreen = () => {
     // console.log(
     //   `Адреса електронної пошти - "${email}", пароль - "${password}"`
     // );
+    loginDB({ email, password });
     setEmail("");
     setPassword("");
     navigation.navigate("Home");
