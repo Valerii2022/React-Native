@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -19,6 +20,11 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../../../config";
+import {
+  authorized,
+  unauthorized,
+  currentAuth,
+} from "../../../Redux/rootReducer";
 
 const loginDB = async ({ email, password }) => {
   try {
@@ -37,6 +43,8 @@ const LoginScreen = () => {
   const [focusPassword, setFocusPassword] = useState(false);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const selector = useSelector(currentAuth);
 
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
@@ -57,6 +65,7 @@ const LoginScreen = () => {
     //   `Адреса електронної пошти - "${email}", пароль - "${password}"`
     // );
     loginDB({ email, password });
+    dispatch(authorized());
     setEmail("");
     setPassword("");
     navigation.navigate("Home");
