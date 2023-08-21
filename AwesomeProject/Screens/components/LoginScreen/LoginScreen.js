@@ -26,15 +26,6 @@ import {
   currentAuth,
 } from "../../../Redux/rootReducer";
 
-const loginDB = async ({ email, password }) => {
-  try {
-    const credentials = await signInWithEmailAndPassword(auth, email, password);
-    return credentials.user;
-  } catch (error) {
-    throw error;
-  }
-};
-
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,9 +35,26 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const selector = useSelector(currentAuth);
-
+  const authSelector = useSelector(currentAuth);
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
+  const loginDB = async ({ email, password }) => {
+    try {
+      const credentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(auth.currentUser.displayName);
+      navigation.navigate("Home");
+      dispatch(authorized());
+      return credentials.user;
+    } catch (error) {
+      Alert.alert("Невірна адреса електронної пошти або пароль");
+      navigation.navigate("Login");
+      throw error;
+    }
+  };
 
   const onLogin = () => {
     // if (email === "" || password === "") {
@@ -65,10 +73,8 @@ const LoginScreen = () => {
     //   `Адреса електронної пошти - "${email}", пароль - "${password}"`
     // );
     loginDB({ email, password });
-    dispatch(authorized());
     setEmail("");
     setPassword("");
-    navigation.navigate("Home");
   };
 
   return (

@@ -14,7 +14,12 @@ import {
 import Button from "../Button/Button";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { add, remove, usersNames } from "../../../Redux/rootReducer";
+import {
+  add,
+  authorized,
+  remove,
+  usersNames,
+} from "../../../Redux/rootReducer";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -34,13 +39,40 @@ const RegistrationScreen = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const selector = useSelector(usersNames);
+  const usersSelector = useSelector(usersNames);
 
   const registerDB = async ({ email, password }) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      updateUserProfile({ displayName: login });
+      navigation.navigate("Home");
+      dispatch(remove());
+      dispatch(authorized());
     } catch (error) {
+      Alert.alert("Помилка реєстрації");
+      navigation.navigate("Registration");
       throw error;
+    }
+  };
+
+  // const authStateChanged = async (onChange = () => {}) => {
+  //   onAuthStateChanged((user) => {
+  //     onChange(user);
+  //   });
+  // };
+
+  const updateUserProfile = async (update) => {
+    const user = auth.currentUser;
+    // якщо такий користувач знайдений
+    if (user) {
+      // оновлюємо його профайл
+      try {
+        console.log(user);
+        await updateProfile(user, update);
+      } catch (error) {
+        console.log("no user!");
+        throw error;
+      }
     }
   };
 
@@ -67,12 +99,9 @@ const RegistrationScreen = () => {
     //   `Логін - "${login}",адреса електронної пошти - "${email}", пароль - "${password}"`
     // );
     registerDB({ email, password });
-    dispatch(add({ login, email, password }));
-    // dispatch(remove());
     setLogin("");
     setEmail("");
     setPassword("");
-    navigation.navigate("Home");
   };
 
   return (

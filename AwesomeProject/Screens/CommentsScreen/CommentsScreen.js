@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const CommentsScreen = () => {
   const navigation = useNavigation();
+
   return (
     <ScrollView>
       <View style={styles.container}>

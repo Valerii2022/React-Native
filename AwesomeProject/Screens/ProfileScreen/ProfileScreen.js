@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -9,9 +10,19 @@ import {
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { authorized, unauthorized, currentAuth } from "../../Redux/rootReducer";
+import { getAuth } from "firebase/auth";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const currentUser = getAuth();
+
+  const logout = () => {
+    dispatch(unauthorized());
+    navigation.navigate("Login");
+  };
+
   return (
     <ScrollView>
       <ImageBackground
@@ -31,13 +42,12 @@ const ProfileScreen = () => {
                 source={require("../../assets/images/delete.png")}
               />
             </View>
-            <Pressable
-              style={styles.logOut}
-              onPress={() => navigation.navigate("Login")}
-            >
+            <Pressable style={styles.logOut} onPress={logout}>
               <Image source={require("../../assets/images/logout.png")} />
             </Pressable>
-            <Text style={styles.title}>Natali Romanova</Text>
+            <Text style={styles.title}>
+              {currentUser.currentUser.displayName}
+            </Text>
             <View style={styles.postWrap}>
               <Image
                 style={styles.postImage}

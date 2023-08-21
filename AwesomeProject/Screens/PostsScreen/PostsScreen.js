@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -7,22 +8,38 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
+import {
+  authorized,
+  unauthorized,
+  currentAuth,
+  usersNames,
+  posts,
+} from "../../Redux/rootReducer";
+import { auth } from "../../config";
+import { getAuth } from "firebase/auth";
 
-const Tabs = createBottomTabNavigator();
+// const Tabs = createBottomTabNavigator();
 
 const PostsScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const currentUser = getAuth();
+  const allPosts = useSelector(posts);
+
+  const logout = () => {
+    console.log(allPosts);
+    dispatch(unauthorized());
+    navigation.navigate("Login");
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Публікації</Text>
-          <Pressable
-            style={styles.logOut}
-            onPress={() => navigation.navigate("Login")}
-          >
+          <Pressable style={styles.logOut} onPress={logout}>
             <Image source={require("../../assets/images/logout.png")} />
           </Pressable>
         </View>
@@ -33,8 +50,12 @@ const PostsScreen = () => {
               source={require("../../assets/images/user.jpg")}
             />
             <View style={styles.userInfo}>
-              <Text style={styles.userName}>Natali Romanova</Text>
-              <Text style={styles.userEmail}>email@example.com</Text>
+              <Text style={styles.userName}>
+                {currentUser.currentUser.displayName}
+              </Text>
+              <Text style={styles.userEmail}>
+                {currentUser.currentUser.email}
+              </Text>
             </View>
           </View>
           <View style={styles.postWrap}>
