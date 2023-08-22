@@ -10,13 +10,19 @@ import {
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { authorized, unauthorized, currentAuth } from "../../Redux/rootReducer";
+import {
+  authorized,
+  unauthorized,
+  currentAuth,
+  currentPosts,
+} from "../../Redux/rootReducer";
 import { getAuth } from "firebase/auth";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const currentUser = getAuth();
+  const currentUserPosts = useSelector(currentPosts);
 
   const logout = () => {
     dispatch(unauthorized());
@@ -48,99 +54,52 @@ const ProfileScreen = () => {
             <Text style={styles.title}>
               {currentUser.currentUser.displayName}
             </Text>
-            <View style={styles.postWrap}>
-              <Image
-                style={styles.postImage}
-                source={require("../../assets/images/img-1.jpg")}
-              />
-              <Text style={styles.postTitle}>Ліс</Text>
-              <View style={styles.postInfoWrap}>
-                <View style={styles.commentsWrap}>
-                  <Pressable
-                    onPress={() => {
-                      navigation.navigate("Comments");
-                    }}
-                  >
-                    <Image
-                      style={styles.postImage}
-                      source={require("../../assets/images/comment-active.png")}
-                    />
-                  </Pressable>
-                  <Text style={styles.commentNumber}>8</Text>
-                  <Image
-                    style={styles.postImage}
-                    source={require("../../assets/images/like.png")}
-                  />
-                  <Text style={styles.commentNumber}>153</Text>
-                </View>
-                <Pressable
-                  onPress={() => navigation.navigate("Maps")}
-                  style={styles.locationWrap}
-                >
-                  <Image
-                    style={styles.postImage}
-                    source={require("../../assets/images/map-pin.png")}
-                  />
-                  <Text style={styles.location}>Ukraine</Text>
-                </Pressable>
-              </View>
-            </View>
-            <View style={styles.postWrap}>
-              <Image
-                style={styles.postImage}
-                source={require("../../assets/images/img-2.jpg")}
-              />
-              <Text style={styles.postTitle}>Захід на Чорному морі</Text>
-              <View style={styles.postInfoWrap}>
-                <View style={styles.commentsWrap}>
-                  <Image
-                    style={styles.postImage}
-                    source={require("../../assets/images/comment-active.png")}
-                  />
-                  <Text style={styles.commentNumber}>3</Text>
-                  <Image
-                    style={styles.postImage}
-                    source={require("../../assets/images/like.png")}
-                  />
-                  <Text style={styles.commentNumber}>200</Text>
-                </View>
-                <View style={styles.locationWrap}>
-                  <Image
-                    style={styles.postImage}
-                    source={require("../../assets/images/map-pin.png")}
-                  />
-                  <Text style={styles.location}>Ukraine</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.postWrap}>
-              <Image
-                style={styles.postImage}
-                source={require("../../assets/images/img-3.jpg")}
-              />
-              <Text style={styles.postTitle}>Старий будиночок у Венеції</Text>
-              <View style={styles.postInfoWrap}>
-                <View style={styles.commentsWrap}>
-                  <Image
-                    style={styles.postImage}
-                    source={require("../../assets/images/comment-active.png")}
-                  />
-                  <Text style={styles.commentNumber}>50</Text>
-                  <Image
-                    style={styles.postImage}
-                    source={require("../../assets/images/like.png")}
-                  />
-                  <Text style={styles.commentNumber}>200</Text>
-                </View>
-                <View style={styles.locationWrap}>
-                  <Image
-                    style={styles.postImage}
-                    source={require("../../assets/images/map-pin.png")}
-                  />
-                  <Text style={styles.location}>Italy</Text>
-                </View>
-              </View>
-            </View>
+            {currentUserPosts &&
+              currentUserPosts.map((post) => {
+                if (post.uid === currentUser.currentUser.uid) {
+                  return (
+                    <View key={post.id} style={styles.postWrap}>
+                      <Image
+                        style={styles.postImage}
+                        source={require("../../assets/images/img-1.jpg")}
+                      />
+                      <Text style={styles.postTitle}>{post.postName}</Text>
+                      <View style={styles.postInfoWrap}>
+                        <View style={styles.commentsWrap}>
+                          <Pressable
+                            onPress={() => {
+                              navigation.navigate("Comments");
+                            }}
+                          >
+                            <Image
+                              style={styles.postImage}
+                              source={require("../../assets/images/comment-active.png")}
+                            />
+                          </Pressable>
+                          <Text style={styles.commentNumber}>8</Text>
+                          <Image
+                            style={styles.postImage}
+                            source={require("../../assets/images/like.png")}
+                          />
+                          <Text style={styles.commentNumber}>153</Text>
+                        </View>
+                        <Pressable
+                          onPress={() => navigation.navigate("Maps")}
+                          style={styles.locationWrap}
+                        >
+                          <Image
+                            style={styles.postImage}
+                            source={require("../../assets/images/map-pin.png")}
+                          />
+                          <Text style={styles.location}>
+                            {post.postLocation}
+                          </Text>
+                        </Pressable>
+                      </View>
+                    </View>
+                  );
+                }
+              })}
           </View>
         </View>
       </ImageBackground>

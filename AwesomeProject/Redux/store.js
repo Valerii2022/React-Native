@@ -14,6 +14,7 @@ import {
   usersReducer,
   authReducer,
   postsReducer,
+  currentPostsReducer,
   commentsReducer,
 } from "./rootReducer";
 
@@ -22,6 +23,7 @@ export const store = configureStore({
     users: usersReducer,
     isAuth: authReducer,
     posts: postsReducer,
+    currentPosts: currentPostsReducer,
     comments: commentsReducer,
   },
   middleware: (getDefaultMiddleware) =>

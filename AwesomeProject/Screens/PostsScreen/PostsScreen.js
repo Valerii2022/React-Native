@@ -1,5 +1,5 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -9,7 +9,12 @@ import {
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { unauthorized } from "../../Redux/rootReducer";
+import {
+  addCurrentPosts,
+  removeCurrentPosts,
+  currentPosts,
+  unauthorized,
+} from "../../Redux/rootReducer";
 import { getAuth } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../config";
@@ -17,25 +22,28 @@ import { db } from "../../config";
 const PostsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const currentUserPosts = useSelector(currentPosts);
   const currentUser = getAuth();
 
-  const getDataFromFirestore = async () => {
-    try {
-      const snapshot = await getDocs(
-        collection(db, "posts"),
-        where("uid", "==", currentUser.currentUser.uid)
-      );
-      snapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()));
-
-      return snapshot.map((doc) => ({ id: doc.id, data: doc.data() }));
-    } catch (error) {
-      throw error;
-    }
-  };
+  useEffect(() => {
+    (async () => {
+      try {
+        const posts = [];
+        const snapshot = await getDocs(
+          collection(db, "posts"),
+          where("uid", "==", currentUser.currentUser.uid)
+        );
+        snapshot.forEach((doc) => posts.push({ id: doc.id, ...doc.data() }));
+        dispatch(addCurrentPosts(posts));
+      } catch (error) {
+        throw error;
+      }
+    })();
+  }, []);
 
   const logout = () => {
-    console.log(getDataFromFirestore);
     dispatch(unauthorized());
+    dispatch(removeCurrentPosts());
     navigation.navigate("Login");
   };
 
@@ -63,56 +71,36 @@ const PostsScreen = () => {
               </Text>
             </View>
           </View>
-          <View style={styles.postWrap}>
-            <Image
-              style={styles.postImage}
-              source={require("../../assets/images/img-1.jpg")}
-            />
-            <Text style={styles.postTitle}>Ліс</Text>
-            <View style={styles.postInfoWrap}>
-              <View style={styles.commentsWrap}>
-                <Image
-                  style={styles.postImage}
-                  source={require("../../assets/images/comment.png")}
-                />
-                <Text style={styles.commentNumber}>0</Text>
-              </View>
-              <View style={styles.locationWrap}>
-                <Image
-                  style={styles.postImage}
-                  source={require("../../assets/images/map-pin.png")}
-                />
-                <Text style={styles.location}>
-                  Ivano-Frankivs'k Region, Ukraine
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.postWrap}>
-            <Image
-              style={styles.postImage}
-              source={require("../../assets/images/img-2.jpg")}
-            />
-            <Text style={styles.postTitle}>Ліс</Text>
-            <View style={styles.postInfoWrap}>
-              <View style={styles.commentsWrap}>
-                <Image
-                  style={styles.postImage}
-                  source={require("../../assets/images/comment.png")}
-                />
-                <Text style={styles.commentNumber}>0</Text>
-              </View>
-              <View style={styles.locationWrap}>
-                <Image
-                  style={styles.postImage}
-                  source={require("../../assets/images/map-pin.png")}
-                />
-                <Text style={styles.location}>
-                  Ivano-Frankivs'k Region, Ukraine
-                </Text>
-              </View>
-            </View>
-          </View>
+          {currentUserPosts &&
+            currentUserPosts.map((post) => {
+              if (currentUser.currentUser.uid === post.uid) {
+                return (
+                  <View key={post.id} style={styles.postWrap}>
+                    <Image
+                      style={styles.postImage}
+                      source={require("../../assets/images/img-1.jpg")}
+                    />
+                    <Text style={styles.postTitle}>{post.postName}</Text>
+                    <View style={styles.postInfoWrap}>
+                      <View style={styles.commentsWrap}>
+                        <Image
+                          style={styles.postImage}
+                          source={require("../../assets/images/comment.png")}
+                        />
+                        <Text style={styles.commentNumber}>0</Text>
+                      </View>
+                      <View style={styles.locationWrap}>
+                        <Image
+                          style={styles.postImage}
+                          source={require("../../assets/images/map-pin.png")}
+                        />
+                        <Text style={styles.location}>{post.postLocation}</Text>
+                      </View>
+                    </View>
+                  </View>
+                );
+              }
+            })}
         </View>
       </View>
     </ScrollView>

@@ -117,6 +117,7 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#fff",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",

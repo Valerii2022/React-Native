@@ -8,11 +8,9 @@ const usersSlice = createSlice({
   reducers: {
     add(state, action) {
       state.users.push(action.payload);
-      console.log("usersReducer", state);
     },
     remove(state, action) {
       state.users = [];
-      console.log("usersReducer", state);
     },
   },
 });
@@ -23,11 +21,9 @@ const authSlice = createSlice({
   reducers: {
     authorized(state) {
       state.isAuth = true;
-      console.log("Auth reducer", state);
     },
     unauthorized(state, action) {
       state.isAuth = false;
-      console.log("auth logout reducer", state);
     },
   },
 });
@@ -38,11 +34,24 @@ const postsSlice = createSlice({
   reducers: {
     addPost(state, action) {
       state.posts.push(action.payload);
-      console.log("addPosts", state);
     },
     removePost(state, action) {
       state.posts = [];
-      console.log("posts", state);
+    },
+  },
+});
+
+const currentUserPostsSlice = createSlice({
+  name: "currentPosts",
+  initialState: { currentPosts: [] },
+  reducers: {
+    addCurrentPosts(state, action) {
+      state.currentPosts = [...action.payload];
+      console.log(state);
+    },
+    removeCurrentPosts(state, action) {
+      state.currentPosts = [];
+      console.log(state);
     },
   },
 });
@@ -53,11 +62,9 @@ const commentsSlice = createSlice({
   reducers: {
     addComment(state, action) {
       state.comments.push(action.payload);
-      console.log("comments", state);
     },
     removeComment(state, action) {
       state.comments = [];
-      console.log("comments", state);
     },
   },
 });
@@ -70,6 +77,10 @@ const persistConfig = {
 export const usersReducer = persistReducer(persistConfig, usersSlice.reducer);
 export const authReducer = persistReducer(persistConfig, authSlice.reducer);
 export const postsReducer = persistReducer(persistConfig, postsSlice.reducer);
+export const currentPostsReducer = persistReducer(
+  persistConfig,
+  currentUserPostsSlice.reducer
+);
 export const commentsReducer = persistReducer(
   persistConfig,
   commentsSlice.reducer
@@ -79,10 +90,13 @@ export const commentsReducer = persistReducer(
 export const { add, remove } = usersSlice.actions;
 export const { authorized, unauthorized } = authSlice.actions;
 export const { addPost, removePost } = postsSlice.actions;
+export const { addCurrentPosts, removeCurrentPosts } =
+  currentUserPostsSlice.actions;
 export const { addComment, removeComment } = commentsSlice.actions;
 
 // Selectors
 export const usersNames = (state) => state.users.users;
 export const currentAuth = (state) => state.isAuth.isAuth;
 export const posts = (state) => state.posts.posts;
+export const currentPosts = (state) => state.currentPosts.currentPosts;
 export const comments = (state) => state.comments.comments;
