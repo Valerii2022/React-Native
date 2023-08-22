@@ -10,17 +10,19 @@ import {
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { currentPosts } from "../../Redux/rootReducer";
+import { addPostComment, currentPosts } from "../../Redux/rootReducer";
 
 const CommentsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { id } = route.params;
   const posts = useSelector(currentPosts);
+  const dispatch = useDispatch();
   const post = posts.filter((item) => {
     return item.id === id;
   });
 
   const sendComment = () => {
+    dispatch(addPostComment("hi"));
     console.log(id, post[0]);
   };
 

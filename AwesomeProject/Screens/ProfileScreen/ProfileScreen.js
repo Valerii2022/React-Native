@@ -90,10 +90,16 @@ const ProfileScreen = () => {
                             style={styles.postImage}
                             source={require("../../assets/images/like.png")}
                           />
-                          <Text style={styles.commentNumber}>153</Text>
+                          <Text style={styles.commentNumber}>
+                            {post.likes ? post.likes.length : 0}
+                          </Text>
                         </View>
                         <Pressable
-                          onPress={() => navigation.navigate("Maps")}
+                          onPress={() =>
+                            navigation.navigate("Maps", {
+                              currentCoords: post.location.coords,
+                            })
+                          }
                           style={styles.locationWrap}
                         >
                           <Image
