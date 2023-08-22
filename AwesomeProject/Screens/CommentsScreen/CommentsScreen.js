@@ -16,13 +16,12 @@ const CommentsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { id } = route.params;
   const posts = useSelector(currentPosts);
-  const post = posts.map((item) => {
-    console.log(item.id);
+  const post = posts.filter((item) => {
+    return item.id === id;
   });
 
   const sendComment = () => {
-    console.log(id);
-    console.log(posts);
+    console.log(id, post[0]);
   };
 
   return (
@@ -43,8 +42,8 @@ const CommentsScreen = ({ route }) => {
             source={require("../../assets/images/img-1.jpg")}
           />
           <View style={styles.comments}>
-            {/* {post.id === id &&
-              post.comment.map((comment) => {
+            {post[0].id === id &&
+              post[0].comments.map((comment) => {
                 return (
                   <View key={comment.id} style={styles.commentsItemOwn}>
                     <Image
@@ -59,7 +58,7 @@ const CommentsScreen = ({ route }) => {
                     </View>
                   </View>
                 );
-              })} */}
+              })}
             {/* <View style={styles.commentsItemOwn}>
               <Image
                 style={styles.commentsImage}

@@ -32,7 +32,10 @@ const CreatePostsScreen = () => {
   const [location, setLocation] = useState(null);
   const [postName, setPostName] = useState("");
   const [postLocation, setPostLocation] = useState("");
-  const comments = [{ id: 2, comment: "hello" }];
+  const comments = [
+    { id: 2, comment: "hello" },
+    { id: 1, comment: "hello" },
+  ];
 
   useEffect(() => {
     (async () => {
