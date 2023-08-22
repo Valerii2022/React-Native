@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -9,9 +10,20 @@ import {
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { currentPosts } from "../../Redux/rootReducer";
 
-const CommentsScreen = () => {
+const CommentsScreen = ({ route }) => {
   const navigation = useNavigation();
+  const { id } = route.params;
+  const posts = useSelector(currentPosts);
+  const post = posts.map((item) => {
+    console.log(item.id);
+  });
+
+  const sendComment = () => {
+    console.log(id);
+    console.log(posts);
+  };
 
   return (
     <ScrollView>
@@ -31,7 +43,24 @@ const CommentsScreen = () => {
             source={require("../../assets/images/img-1.jpg")}
           />
           <View style={styles.comments}>
-            <View style={styles.commentsItemOwn}>
+            {/* {post.id === id &&
+              post.comment.map((comment) => {
+                return (
+                  <View key={comment.id} style={styles.commentsItemOwn}>
+                    <Image
+                      style={styles.commentsImage}
+                      source={require("../../assets/images/com-1.png")}
+                    />
+                    <View style={styles.textWrapOwn}>
+                      <Text style={styles.commentsText}>{comment.comment}</Text>
+                      <Text style={styles.commentsDate}>
+                        09 червня, 2020 | 08:40
+                      </Text>
+                    </View>
+                  </View>
+                );
+              })} */}
+            {/* <View style={styles.commentsItemOwn}>
               <Image
                 style={styles.commentsImage}
                 source={require("../../assets/images/com-1.png")}
@@ -69,17 +98,16 @@ const CommentsScreen = () => {
                 </Text>
                 <Text style={styles.commentsDate}>09 червня, 2020 | 09:20</Text>
               </View>
-            </View>
+            </View> */}
           </View>
           <View style={styles.btnWrap}>
             <TextInput
               style={styles.input}
               placeholder="Коментувати..."
             ></TextInput>
-            <Image
-              style={styles.btnIcon}
-              source={require("../../assets/images/Send.png")}
-            />
+            <Pressable style={styles.btnIcon} onPress={() => sendComment()}>
+              <Image source={require("../../assets/images/Send.png")} />
+            </Pressable>
           </View>
         </View>
       </View>

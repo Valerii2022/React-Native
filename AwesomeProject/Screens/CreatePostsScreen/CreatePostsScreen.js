@@ -32,6 +32,7 @@ const CreatePostsScreen = () => {
   const [location, setLocation] = useState(null);
   const [postName, setPostName] = useState("");
   const [postLocation, setPostLocation] = useState("");
+  const comments = [{ id: 2, comment: "hello" }];
 
   useEffect(() => {
     (async () => {
@@ -54,7 +55,8 @@ const CreatePostsScreen = () => {
     postName,
     postLocation,
     location,
-    uriImage
+    uriImage,
+    comments
   ) => {
     try {
       const docRef = await addDoc(collection(db, "posts"), {
@@ -63,6 +65,7 @@ const CreatePostsScreen = () => {
         postLocation,
         location,
         uriImage,
+        comments,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
@@ -85,7 +88,8 @@ const CreatePostsScreen = () => {
       postName,
       postLocation,
       location,
-      uriImage
+      uriImage,
+      comments
     );
     setLocation("");
     setUriImage(null);

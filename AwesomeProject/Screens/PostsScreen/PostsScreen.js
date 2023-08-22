@@ -71,36 +71,35 @@ const PostsScreen = () => {
               </Text>
             </View>
           </View>
-          {currentUserPosts &&
-            currentUserPosts.map((post) => {
-              if (currentUser.currentUser.uid === post.uid) {
-                return (
-                  <View key={post.id} style={styles.postWrap}>
-                    <Image
-                      style={styles.postImage}
-                      source={require("../../assets/images/img-1.jpg")}
-                    />
-                    <Text style={styles.postTitle}>{post.postName}</Text>
-                    <View style={styles.postInfoWrap}>
-                      <View style={styles.commentsWrap}>
-                        <Image
-                          style={styles.postImage}
-                          source={require("../../assets/images/comment.png")}
-                        />
-                        <Text style={styles.commentNumber}>0</Text>
-                      </View>
-                      <View style={styles.locationWrap}>
-                        <Image
-                          style={styles.postImage}
-                          source={require("../../assets/images/map-pin.png")}
-                        />
-                        <Text style={styles.location}>{post.postLocation}</Text>
-                      </View>
+          {currentUserPosts.map((post) => {
+            if (currentUser.currentUser.uid === post.uid) {
+              return (
+                <View key={post.id} style={styles.postWrap}>
+                  <Image
+                    style={styles.postImage}
+                    source={require("../../assets/images/img-1.jpg")}
+                  />
+                  <Text style={styles.postTitle}>{post.postName}</Text>
+                  <View style={styles.postInfoWrap}>
+                    <View style={styles.commentsWrap}>
+                      <Image
+                        style={styles.postImage}
+                        source={require("../../assets/images/comment.png")}
+                      />
+                      <Text style={styles.commentNumber}>0</Text>
+                    </View>
+                    <View style={styles.locationWrap}>
+                      <Image
+                        style={styles.postImage}
+                        source={require("../../assets/images/map-pin.png")}
+                      />
+                      <Text style={styles.location}>{post.postLocation}</Text>
                     </View>
                   </View>
-                );
-              }
-            })}
+                </View>
+              );
+            }
+          })}
         </View>
       </View>
     </ScrollView>

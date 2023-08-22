@@ -68,7 +68,7 @@ const ProfileScreen = () => {
                         <View style={styles.commentsWrap}>
                           <Pressable
                             onPress={() => {
-                              navigation.navigate("Comments");
+                              navigation.navigate("Comments", { id: post.id });
                             }}
                           >
                             <Image
