@@ -71,12 +71,21 @@ const ProfileScreen = () => {
                               navigation.navigate("Comments", { id: post.id });
                             }}
                           >
-                            <Image
-                              style={styles.postImage}
-                              source={require("../../assets/images/comment-active.png")}
-                            />
+                            {post.comments.length > 0 ? (
+                              <Image
+                                style={styles.postImage}
+                                source={require("../../assets/images/comment-active.png")}
+                              />
+                            ) : (
+                              <Image
+                                style={styles.postImage}
+                                source={require("../../assets/images/comment.png")}
+                              />
+                            )}
                           </Pressable>
-                          <Text style={styles.commentNumber}>8</Text>
+                          <Text style={styles.commentNumber}>
+                            {post.comments.length}
+                          </Text>
                           <Image
                             style={styles.postImage}
                             source={require("../../assets/images/like.png")}
