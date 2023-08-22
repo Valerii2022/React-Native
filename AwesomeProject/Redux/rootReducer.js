@@ -8,9 +8,11 @@ const usersSlice = createSlice({
   reducers: {
     add(state, action) {
       state.users.push(action.payload);
+      console.log("add", state);
     },
     remove(state, action) {
       state.users = [];
+      console.log("remove", state);
     },
   },
 });
@@ -21,10 +23,11 @@ const authSlice = createSlice({
   reducers: {
     authorized(state) {
       state.isAuth = true;
-      console.log(state);
+      console.log("authorized", state);
     },
     unauthorized(state, action) {
       state.isAuth = false;
+      console.log("unauthorized", state);
     },
   },
 });
@@ -35,9 +38,18 @@ const postsSlice = createSlice({
   reducers: {
     addPost(state, action) {
       state.posts.push(action.payload);
+      console.log("addPost", state);
     },
     removePost(state, action) {
       state.posts = [];
+      console.log("removePost", state);
+    },
+    addComment(state, action) {
+      const post = state.currentPosts.filter((item) => {
+        return item.id === action.payload.id;
+      });
+      post[0].comments.push(action.payload.comment);
+      console.log("addComment", state.currentPosts);
     },
   },
 });
@@ -47,31 +59,28 @@ const currentUserPostsSlice = createSlice({
   initialState: { currentPosts: [] },
   reducers: {
     addCurrentPosts(state, action) {
-      state.currentPosts = [...action.payload];
-      console.log(state);
+      // state.currentPosts = [...action.payload];
+      console.log("addCurrentPosts", state);
     },
     removeCurrentPosts(state, action) {
       state.currentPosts = [];
-      console.log(state);
-    },
-    addPostComment(state, action) {
-      state.currentPosts.comments.push(action.payload);
+      console.log("removeCurrentPosts", state);
     },
   },
 });
 
-const commentsSlice = createSlice({
-  name: "comments",
-  initialState: { comments: [] },
-  reducers: {
-    addComment(state, action) {
-      state.comments.push(action.payload);
-    },
-    removeComment(state, action) {
-      state.comments = [];
-    },
-  },
-});
+// const commentsSlice = createSlice({
+//   name: "comments",
+//   initialState: { comments: [] },
+//   reducers: {
+//     addComment(state, action) {
+//       state.comments.push(action.payload);
+//     },
+//     removeComment(state, action) {
+//       state.comments = [];
+//     },
+//   },
+// });
 
 const persistConfig = {
   key: "root",
@@ -85,22 +94,22 @@ export const currentPostsReducer = persistReducer(
   persistConfig,
   currentUserPostsSlice.reducer
 );
-export const commentsReducer = persistReducer(
-  persistConfig,
-  commentsSlice.reducer
-);
+// export const commentsReducer = persistReducer(
+//   persistConfig,
+//   commentsSlice.reducer
+// );
 
 // export const rootReducer = usersSlice.reducer;
 export const { add, remove } = usersSlice.actions;
 export const { authorized, unauthorized } = authSlice.actions;
-export const { addPost, removePost, addPostComment } = postsSlice.actions;
+export const { addPost, removePost, addComment } = postsSlice.actions;
 export const { addCurrentPosts, removeCurrentPosts } =
   currentUserPostsSlice.actions;
-export const { addComment, removeComment } = commentsSlice.actions;
+// export const { addComment, removeComment } = commentsSlice.actions;
 
 // Selectors
 export const usersNames = (state) => state.users.users;
 export const currentAuth = (state) => state.isAuth.isAuth;
 export const posts = (state) => state.posts.posts;
 export const currentPosts = (state) => state.currentPosts.currentPosts;
-export const comments = (state) => state.comments.comments;
+// export const comments = (state) => state.comments.comments;

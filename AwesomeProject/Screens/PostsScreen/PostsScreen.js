@@ -34,7 +34,7 @@ const PostsScreen = () => {
           where("uid", "==", currentUser.currentUser.uid)
         );
         snapshot.forEach((doc) => posts.push({ id: doc.id, ...doc.data() }));
-        dispatch(addCurrentPosts(posts));
+        // dispatch(addCurrentPosts(posts));
       } catch (error) {
         throw error;
       }
@@ -60,7 +60,7 @@ const PostsScreen = () => {
           <View style={styles.user}>
             <Image
               style={styles.userAvatar}
-              source={require("../../assets/images/user.jpg")}
+              src={currentUser.currentUser.photoURL}
             />
             <View style={styles.userInfo}>
               <Text style={styles.userName}>
@@ -75,10 +75,7 @@ const PostsScreen = () => {
             if (currentUser.currentUser.uid === post.uid) {
               return (
                 <View key={post.id} style={styles.postWrap}>
-                  <Image
-                    style={styles.postImage}
-                    source={require("../../assets/images/img-1.jpg")}
-                  />
+                  <Image style={styles.postImage} src={post.uriImage} />
                   <Text style={styles.postTitle}>{post.postName}</Text>
                   <View style={styles.postInfoWrap}>
                     <View style={styles.commentsWrap}>
@@ -145,6 +142,8 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   userAvatar: {
+    width: 60,
+    height: 60,
     borderRadius: 16,
   },
   userInfo: {

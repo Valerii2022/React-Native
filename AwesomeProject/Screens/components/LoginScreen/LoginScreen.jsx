@@ -44,7 +44,6 @@ const LoginScreen = () => {
         email,
         password
       );
-      console.log(auth.currentUser.displayName);
       navigation.navigate("Home");
       dispatch(authorized());
       return credentials.user;
@@ -56,21 +55,21 @@ const LoginScreen = () => {
   };
 
   const onLogin = () => {
-    // if (email === "" || password === "") {
-    //   Alert.alert("Всі поля обов'язкові для заповнення!");
-    //   return;
-    // }
-    // if (reg.test(email) === false) {
-    //   Alert.alert("Невірний формат адреси електронної пошти!");
-    //   return;
-    // }
-    // if (password.length < 6) {
-    //   Alert.alert("Пароль має бути довжиною мінімум 6 символів!");
-    //   return;
-    // }
-    // console.log(
-    //   `Адреса електронної пошти - "${email}", пароль - "${password}"`
-    // );
+    if (email === "" || password === "") {
+      Alert.alert("Всі поля обов'язкові для заповнення!");
+      return;
+    }
+    if (reg.test(email) === false) {
+      Alert.alert("Невірний формат адреси електронної пошти!");
+      return;
+    }
+    if (password.length < 6) {
+      Alert.alert("Пароль має бути довжиною мінімум 6 символів!");
+      return;
+    }
+    console.log(
+      `Адреса електронної пошти - "${email}", пароль - "${password}"`
+    );
     loginDB({ email, password });
     setEmail("");
     setPassword("");

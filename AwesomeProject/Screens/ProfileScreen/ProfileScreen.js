@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
@@ -41,7 +41,7 @@ const ProfileScreen = () => {
             <View style={styles.avatar}>
               <Image
                 style={styles.photo}
-                source={require("../../assets/images/user-photo.jpg")}
+                src={currentUser.currentUser.photoURL}
               />
               <Image
                 style={styles.deleteIcon}
@@ -59,10 +59,7 @@ const ProfileScreen = () => {
                 if (post.uid === currentUser.currentUser.uid) {
                   return (
                     <View key={post.id} style={styles.postWrap}>
-                      <Image
-                        style={styles.postImage}
-                        source={require("../../assets/images/img-1.jpg")}
-                      />
+                      <Image style={styles.postImage} src={post.uriImage} />
                       <Text style={styles.postTitle}>{post.postName}</Text>
                       <View style={styles.postInfoWrap}>
                         <View style={styles.commentsWrap}>

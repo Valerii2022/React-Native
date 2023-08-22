@@ -32,10 +32,7 @@ const CreatePostsScreen = () => {
   const [location, setLocation] = useState(null);
   const [postName, setPostName] = useState("");
   const [postLocation, setPostLocation] = useState("");
-  const comments = [
-    { id: 2, comment: "hello" },
-    { id: 1, comment: "hello" },
-  ];
+  const comments = [];
   const likes = null;
 
   useEffect(() => {
@@ -46,6 +43,13 @@ const CreatePostsScreen = () => {
       setHasPermission(status === "granted");
     })();
   }, []);
+
+  const closeCamera = async () => {
+    const { status } = await Camera.requestCameraPermissionsAsync();
+    await MediaLibrary.requestPermissionsAsync();
+
+    setHasPermission(status === "granted");
+  };
 
   if (hasPermission === null) {
     return <View />;
@@ -87,8 +91,9 @@ const CreatePostsScreen = () => {
       longitude: location.coords.longitude,
     };
     setLocation(coords);
-    console.log(postName, postLocation, location, uriImage);
-    dispatch(addPost({ postName, postLocation, location, uriImage }));
+    dispatch(
+      addPost({ postName, postLocation, location, uriImage, comments, likes })
+    );
     writeDataToFirestore(
       user.currentUser.uid,
       postName,
@@ -102,6 +107,7 @@ const CreatePostsScreen = () => {
     setUriImage(null);
     setPostName("");
     setPostLocation("");
+    closeCamera();
     navigation.navigate("Posts");
   };
 
@@ -111,7 +117,10 @@ const CreatePostsScreen = () => {
         <View style={styles.header}>
           <Pressable
             style={styles.goBack}
-            onPress={() => navigation.navigate("Posts")}
+            onPress={() => {
+              closeCamera();
+              navigation.navigate("Posts");
+            }}
           >
             <Image source={require("../../assets/images/arrow-left.png")} />
           </Pressable>
@@ -147,17 +156,6 @@ const CreatePostsScreen = () => {
                       }}
                       source={require("../../assets/images/flip2.png")}
                     />
-                    {/* <Text
-                      style={{
-                        fontSize: 24,
-                        marginTop: 10,
-                        marginRight: 10,
-                        color: "white",
-                      }}
-                    >
-                      {" "}
-                      Flip{" "}
-                    </Text> */}
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.button}

@@ -8,7 +8,6 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import Button from "../components/Button/Button";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
@@ -75,7 +74,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingTop: 44,
     flexDirection: "column",
-    // minHeight: "100%",
   },
   header: {
     paddingTop: 11,
@@ -98,7 +96,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   main: {
-    // flexGrow: 1,
     padding: 16,
     flex: 1,
     backgroundColor: "#fff",
