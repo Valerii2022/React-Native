@@ -26,7 +26,7 @@ const updateDataInFirestore = async (collectionName, docId, update) => {
     const ref = doc(db, collectionName, docId);
 
     await updateDoc(ref, {
-      comments: update,
+      comments: [...update],
     });
     console.log("document updated");
   } catch (error) {
@@ -88,9 +88,9 @@ const CommentsScreen = ({ route }) => {
             <Pressable
               style={styles.btnIcon}
               onPress={() => {
-                // console.log(post);
+                console.log(posts);
                 dispatch(addComment({ comment, id }));
-                // updateDataInFirestore("posts", id, comment);
+                updateDataInFirestore("posts", id, comment);
                 setComment(null);
               }}
             >

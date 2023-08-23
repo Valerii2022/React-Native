@@ -7,7 +7,7 @@ const usersSlice = createSlice({
   initialState: { users: [] },
   reducers: {
     add(state, action) {
-      state.users.push(action.payload);
+      // state.users.push(action.payload);
       console.log("add", state);
     },
     remove(state, action) {
@@ -48,8 +48,11 @@ const postsSlice = createSlice({
       const post = state.currentPosts.filter((item) => {
         return item.id === action.payload.id;
       });
-      post[0].comments.push(action.payload.comment);
-      console.log("addComment", state.currentPosts);
+      if (post[0]) {
+        post[0].comments.push(action.payload.comment);
+      } else {
+        post[0].comments = [action.payload.comment];
+      }
     },
   },
 });
@@ -59,12 +62,10 @@ const currentUserPostsSlice = createSlice({
   initialState: { currentPosts: [] },
   reducers: {
     addCurrentPosts(state, action) {
-      // state.currentPosts = [...action.payload];
-      console.log("addCurrentPosts", state);
+      state.currentPosts = [...action.payload];
     },
     removeCurrentPosts(state, action) {
       state.currentPosts = [];
-      console.log("removeCurrentPosts", state);
     },
   },
 });

@@ -34,12 +34,12 @@ const PostsScreen = () => {
           where("uid", "==", currentUser.currentUser.uid)
         );
         snapshot.forEach((doc) => posts.push({ id: doc.id, ...doc.data() }));
-        // dispatch(addCurrentPosts(posts));
+        dispatch(addCurrentPosts(posts));
       } catch (error) {
         throw error;
       }
     })();
-  }, []);
+  }, [currentUserPosts]);
 
   const logout = () => {
     dispatch(unauthorized());
