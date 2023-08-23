@@ -7,12 +7,13 @@ const usersSlice = createSlice({
   initialState: { users: [] },
   reducers: {
     add(state, action) {
-      // state.users.push(action.payload);
-      console.log("add", state);
+      // console.log(state.users);
+      // if (state.users) {
+      //   state.users.push(action.payload);
+      // }
     },
     remove(state, action) {
       state.users = [];
-      console.log("remove", state);
     },
   },
 });
@@ -23,11 +24,9 @@ const authSlice = createSlice({
   reducers: {
     authorized(state) {
       state.isAuth = true;
-      console.log("authorized", state);
     },
     unauthorized(state, action) {
       state.isAuth = false;
-      console.log("unauthorized", state);
     },
   },
 });
@@ -38,11 +37,9 @@ const postsSlice = createSlice({
   reducers: {
     addPost(state, action) {
       state.posts.push(action.payload);
-      console.log("addPost", state);
     },
     removePost(state, action) {
       state.posts = [];
-      console.log("removePost", state);
     },
     addComment(state, action) {
       const post = state.currentPosts.filter((item) => {
@@ -50,8 +47,6 @@ const postsSlice = createSlice({
       });
       if (post[0]) {
         post[0].comments.push(action.payload.comment);
-      } else {
-        post[0].comments = [action.payload.comment];
       }
     },
   },

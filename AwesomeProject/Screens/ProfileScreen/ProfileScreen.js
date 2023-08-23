@@ -80,16 +80,26 @@ const ProfileScreen = () => {
                               />
                             )}
                           </Pressable>
-                          <Text style={styles.commentNumber}>
-                            {post.comments.length}
-                          </Text>
+                          {post.comments.length > 0 ? (
+                            <Text style={styles.commentNumberActive}>
+                              {post.comments.length}
+                            </Text>
+                          ) : (
+                            <Text style={styles.commentNumber}>
+                              {post.comments.length}
+                            </Text>
+                          )}
                           <Image
                             style={styles.postImage}
                             source={require("../../assets/images/like.png")}
                           />
-                          <Text style={styles.commentNumber}>
-                            {post.likes ? post.likes.length : 0}
-                          </Text>
+                          {post.likes ? (
+                            <Text style={styles.commentNumberActive}>
+                              {post.likes.length}
+                            </Text>
+                          ) : (
+                            <Text style={styles.commentNumber}>0</Text>
+                          )}
                         </View>
                         <Pressable
                           onPress={() =>
@@ -200,6 +210,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   commentNumber: {
+    color: "#bdbdbd",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    marginLeft: 6,
+    marginRight: 24,
+  },
+  commentNumberActive: {
     color: "#212121",
     fontFamily: "Roboto",
     fontSize: 16,

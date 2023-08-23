@@ -79,12 +79,34 @@ const PostsScreen = () => {
                   <Text style={styles.postTitle}>{post.postName}</Text>
                   <View style={styles.postInfoWrap}>
                     <View style={styles.commentsWrap}>
-                      <Image
-                        style={styles.postImage}
-                        source={require("../../assets/images/comment.png")}
-                      />
-                      <Text style={styles.commentNumber}>0</Text>
+                      <Pressable
+                        onPress={() => {
+                          navigation.navigate("Comments", { id: post.id });
+                        }}
+                      >
+                        {post.comments.length > 0 ? (
+                          <Image
+                            style={styles.postImage}
+                            source={require("../../assets/images/comment-active.png")}
+                          />
+                        ) : (
+                          <Image
+                            style={styles.postImage}
+                            source={require("../../assets/images/comment.png")}
+                          />
+                        )}
+                      </Pressable>
+                      {post.comments.length > 0 ? (
+                        <Text style={styles.commentNumberActive}>
+                          {post.comments.length}
+                        </Text>
+                      ) : (
+                        <Text style={styles.commentNumber}>
+                          {post.comments.length}
+                        </Text>
+                      )}
                     </View>
+
                     <View style={styles.locationWrap}>
                       <Image
                         style={styles.postImage}
@@ -184,6 +206,12 @@ const styles = StyleSheet.create({
   },
   commentNumber: {
     color: "#bdbdbd",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    marginLeft: 6,
+  },
+  commentNumberActive: {
+    color: "#212121",
     fontFamily: "Roboto",
     fontSize: 16,
     marginLeft: 6,

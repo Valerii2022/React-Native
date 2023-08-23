@@ -19,14 +19,14 @@ import {
 } from "../../Redux/rootReducer";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../config";
-import { nanoid } from "nanoid";
+import { nanoid } from "nanoid/non-secure";
 
 const updateDataInFirestore = async (collectionName, docId, update) => {
   try {
     const ref = doc(db, collectionName, docId);
 
     await updateDoc(ref, {
-      comments: [...update],
+      comments: [update],
     });
     console.log("document updated");
   } catch (error) {
@@ -44,6 +44,8 @@ const CommentsScreen = ({ route }) => {
   const post = posts.filter((item) => {
     return item.id === id;
   });
+  let allComments = [];
+  let commentId = null;
 
   return (
     <ScrollView>
@@ -62,8 +64,9 @@ const CommentsScreen = ({ route }) => {
           <View style={styles.comments}>
             {post[0].id === id &&
               post[0].comments.map((comment) => {
+                commentId = nanoid();
                 return (
-                  <View key={comment.id} style={styles.commentsItemOwn}>
+                  <View key={commentId} style={styles.commentsItemOwn}>
                     <Image
                       style={styles.commentsImage}
                       source={require("../../assets/images/com-1.png")}
@@ -88,7 +91,6 @@ const CommentsScreen = ({ route }) => {
             <Pressable
               style={styles.btnIcon}
               onPress={() => {
-                console.log(posts);
                 dispatch(addComment({ comment, id }));
                 updateDataInFirestore("posts", id, comment);
                 setComment(null);
