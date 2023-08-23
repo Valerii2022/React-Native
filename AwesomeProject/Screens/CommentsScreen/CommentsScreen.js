@@ -19,7 +19,8 @@ import {
 } from "../../Redux/rootReducer";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../config";
-import { nanoid } from "nanoid/non-secure";
+import { nanoid } from "nanoid";
+import { v4 as uuidv4 } from "uuid";
 
 const updateDataInFirestore = async (collectionName, docId, update) => {
   try {
@@ -64,9 +65,9 @@ const CommentsScreen = ({ route }) => {
           <View style={styles.comments}>
             {post[0].id === id &&
               post[0].comments.map((comment) => {
-                commentId = nanoid();
+                // commentId = uuidv4()
                 return (
-                  <View key={commentId} style={styles.commentsItemOwn}>
+                  <View key={id} style={styles.commentsItemOwn}>
                     <Image
                       style={styles.commentsImage}
                       source={require("../../assets/images/com-1.png")}

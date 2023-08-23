@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
@@ -22,11 +22,14 @@ import { db } from "../../config";
 const PostsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const currentUserPosts = useSelector(currentPosts);
+  const [currentUserPosts, setCurrentUserPosts] = useState([]);
+
   const currentUser = getAuth();
 
   useEffect(() => {
     (async () => {
+      const currentUserPosts = useSelector(currentPosts);
+      setCurrentUserPosts(currentUserPosts);
       try {
         const posts = [];
         const snapshot = await getDocs(
