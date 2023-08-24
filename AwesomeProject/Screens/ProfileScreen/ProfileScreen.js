@@ -132,9 +132,15 @@ const ProfileScreen = () => {
                             }}
                             style={styles.postImage}
                           >
-                            <Image
-                              source={require("../../assets/images/like.png")}
-                            />
+                            {post.likes ? (
+                              <Image
+                                source={require("../../assets/images/like.png")}
+                              />
+                            ) : (
+                              <Image
+                                source={require("../../assets/images/dislike.png")}
+                              />
+                            )}
                           </Pressable>
                           {post.likes ? (
                             <Text style={styles.commentNumberActive}>
