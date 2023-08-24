@@ -111,7 +111,6 @@ const CommentsScreen = ({ route }) => {
                   { comment, date, commentId },
                 ]);
                 setComment(null);
-                console.log(allComments);
               }}
             >
               <Image source={require("../../assets/images/Send.png")} />
