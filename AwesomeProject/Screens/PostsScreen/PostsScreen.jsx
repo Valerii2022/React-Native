@@ -22,14 +22,12 @@ import { db } from "../../config";
 const PostsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  // const [currentUserPosts, setCurrentUserPosts] = useState([]);
   const currentUserPosts = useSelector(currentPosts);
 
   const currentUser = getAuth();
 
   useEffect(() => {
     (async () => {
-      // setCurrentUserPosts(currentUserPosts);
       try {
         const posts = [];
         const snapshot = await getDocs(
@@ -78,7 +76,7 @@ const PostsScreen = () => {
             if (currentUser.currentUser.uid === post.uid) {
               return (
                 <View key={post.id} style={styles.postWrap}>
-                  <Image style={styles.postImage} src={post.uriImage} />
+                  <Image style={styles.postPhoto} src={post.uriImage} />
                   <Text style={styles.postTitle}>{post.postName}</Text>
                   <View style={styles.postInfoWrap}>
                     <View style={styles.commentsWrap}>
@@ -174,6 +172,7 @@ const styles = StyleSheet.create({
   userInfo: {
     paddingLeft: 8,
   },
+
   userName: {
     fontFamily: "Roboto",
     fontWeight: 700,
@@ -192,6 +191,11 @@ const styles = StyleSheet.create({
   },
   postImage: {
     marginBottom: 8,
+  },
+  postPhoto: {
+    borderRadius: 8,
+    width: 343,
+    height: 240,
   },
   postTitle: {
     color: "#212121",

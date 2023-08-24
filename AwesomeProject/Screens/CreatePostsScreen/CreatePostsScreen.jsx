@@ -9,6 +9,7 @@ import {
   ScrollView,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../config";
@@ -32,6 +33,7 @@ const CreatePostsScreen = () => {
   const [uriImage, setUriImage] = useState(null);
   const [location, setLocation] = useState(null);
   const [postName, setPostName] = useState("");
+  const [camera, setCamera] = useState(true);
   const [postLocation, setPostLocation] = useState("");
   const comments = [];
   const likes = null;
@@ -44,13 +46,6 @@ const CreatePostsScreen = () => {
       setHasPermission(status === "granted");
     })();
   }, []);
-
-  const closeCamera = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    await MediaLibrary.requestPermissionsAsync();
-
-    setHasPermission(status === "granted");
-  };
 
   if (hasPermission === null) {
     return <View />;
@@ -86,38 +81,42 @@ const CreatePostsScreen = () => {
   };
 
   const onPublish = async () => {
-    let location = await Location.getCurrentPositionAsync({});
-    const coords = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    };
-    setLocation(coords);
-    writeDataToFirestore(
-      userId,
-      postName,
-      postLocation,
-      location,
-      uriImage,
-      comments,
-      likes
-    );
-    dispatch(
-      addPost({
+    if (uriImage) {
+      let location = await Location.getCurrentPositionAsync({});
+      const coords = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+      setLocation(coords);
+      writeDataToFirestore(
         userId,
         postName,
         postLocation,
         location,
         uriImage,
         comments,
-        likes,
-      })
-    );
-    setLocation("");
-    setUriImage(null);
-    setPostName("");
-    setPostLocation("");
-    closeCamera();
-    navigation.navigate("Posts");
+        likes
+      );
+      dispatch(
+        addPost({
+          userId,
+          postName,
+          postLocation,
+          location,
+          uriImage,
+          comments,
+          likes,
+        })
+      );
+      setLocation("");
+      setUriImage(null);
+      setPostName("");
+      setPostLocation("");
+      setCamera(!camera);
+      navigation.navigate("Posts");
+    } else {
+      Alert.alert("Додайте фото!");
+    }
   };
 
   return (
@@ -127,7 +126,8 @@ const CreatePostsScreen = () => {
           <Pressable
             style={styles.goBack}
             onPress={() => {
-              closeCamera();
+              console.log(uriImage);
+              setCamera(true);
               navigation.navigate("Posts");
             }}
           >
@@ -138,58 +138,63 @@ const CreatePostsScreen = () => {
         <View style={styles.main}>
           <View style={styles.photoWrapper}>
             <View style={styles.cameraContainer}>
-              <Camera
-                style={styles.camera}
-                type={type}
-                ref={setCameraRef}
-                ratio={"1:1"}
-              >
-                <View style={styles.photoView}>
-                  <TouchableOpacity
-                    style={styles.flipContainer}
-                    onPress={() => {
-                      setType(
-                        type === Camera.Constants.Type.back
-                          ? Camera.Constants.Type.front
-                          : Camera.Constants.Type.back
-                      );
-                    }}
-                  >
-                    <Image
-                      style={{
-                        width: 60,
-                        height: 60,
-                        marginTop: 10,
-                        marginRight: 10,
-                        opacity: 0.3,
+              {camera ? (
+                <Camera
+                  style={styles.camera}
+                  type={type}
+                  ref={setCameraRef}
+                  ratio={"1:1"}
+                >
+                  <View style={styles.photoView}>
+                    <TouchableOpacity
+                      style={styles.flipContainer}
+                      onPress={() => {
+                        setType(
+                          type === Camera.Constants.Type.back
+                            ? Camera.Constants.Type.front
+                            : Camera.Constants.Type.back
+                        );
                       }}
-                      source={require("../../assets/images/flip2.png")}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={async () => {
-                      if (cameraRef) {
-                        const { uri } = await cameraRef.takePictureAsync();
-                        await MediaLibrary.createAssetAsync(uri);
-                        setUriImage(uri);
-                      }
-                    }}
-                  >
-                    <View style={styles.takePhotoOut}>
-                      <View style={styles.takePhotoInner}>
-                        <Image
-                          style={styles.cameraIcon}
-                          source={require("../../assets/images/camera.png")}
-                        />
+                    >
+                      <Image
+                        style={{
+                          width: 60,
+                          height: 60,
+                          marginTop: 10,
+                          marginRight: 10,
+                          opacity: 0.3,
+                        }}
+                        source={require("../../assets/images/flip2.png")}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={async () => {
+                        if (cameraRef) {
+                          const { uri } = await cameraRef.takePictureAsync();
+                          await MediaLibrary.createAssetAsync(uri);
+                          setUriImage(uri);
+                          setCamera(!camera);
+                        }
+                      }}
+                    >
+                      <View style={styles.takePhotoOut}>
+                        <View style={styles.takePhotoInner}>
+                          <Image
+                            style={styles.cameraIcon}
+                            source={require("../../assets/images/camera.png")}
+                          />
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </Camera>
+                    </TouchableOpacity>
+                  </View>
+                </Camera>
+              ) : (
+                <Image style={styles.default} src={uriImage} />
+              )}
             </View>
           </View>
-          <Text style={styles.photoAction}>Завантажте фото</Text>
+          <Text style={styles.photoAction}>Завантажити фото</Text>
           <TextInput
             value={postName}
             onChangeText={setPostName}
@@ -287,6 +292,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     top: 0,
     left: 0,
+  },
+  default: {
+    width: "100%",
+    height: "100%",
   },
 
   takePhotoInner: {

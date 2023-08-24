@@ -10,12 +10,7 @@ import {
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import {
-  authorized,
-  unauthorized,
-  currentAuth,
-  currentPosts,
-} from "../../Redux/rootReducer";
+import { unauthorized, currentPosts } from "../../Redux/rootReducer";
 import { getAuth } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../config";
@@ -92,7 +87,7 @@ const ProfileScreen = () => {
                   const postId = post.id;
                   return (
                     <View key={post.id} style={styles.postWrap}>
-                      <Image style={styles.postImage} src={post.uriImage} />
+                      <Image style={styles.postPhoto} src={post.uriImage} />
                       <Text style={styles.postTitle}>{post.postName}</Text>
                       <View style={styles.postInfoWrap}>
                         <View style={styles.commentsWrap}>
@@ -243,6 +238,11 @@ const styles = StyleSheet.create({
   },
   postImage: {
     marginBottom: 8,
+  },
+  postPhoto: {
+    borderRadius: 8,
+    width: 343,
+    height: 240,
   },
   postTitle: {
     color: "#212121",

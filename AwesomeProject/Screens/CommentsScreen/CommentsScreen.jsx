@@ -12,14 +12,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import {
   addComment,
-  clearComments,
-  addCurrentPosts,
-  addPostComment,
-  removeCurrentPosts,
   currentPosts,
-  allPosts,
   addCurrentComments,
-  removeCurrentComments,
   currentComments,
 } from "../../Redux/rootReducer";
 import { doc, updateDoc } from "firebase/firestore";

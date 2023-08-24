@@ -18,15 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import {
-  add,
-  authorized,
-  remove,
-  removeComment,
-  removeCurrentPosts,
-  removePost,
-  unauthorized,
-} from "../../../Redux/rootReducer";
+import { add, authorized } from "../../../Redux/rootReducer";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -118,10 +110,6 @@ const RegistrationScreen = () => {
       `Логін - "${login}",адреса електронної пошти - "${email}", пароль - "${password}"`
     );
     registerDB({ email, password });
-    // dispatch(remove());
-    // dispatch(unauthorized());
-    // dispatch(removePost());
-    // dispatch(removeCurrentPosts());
     setLogin("");
     setEmail("");
     setPassword("");
@@ -323,7 +311,6 @@ const styles = StyleSheet.create({
     top: -60,
     left: "50%",
     transform: [{ translateX: -50 }],
-    // overflow: "hidden",
   },
   camera: {
     flex: 1,

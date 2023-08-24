@@ -1,19 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ActionCodeOperation } from "firebase/auth";
 
 const usersSlice = createSlice({
   name: "users",
   initialState: { users: [] },
   reducers: {
     add(state, action) {
-      // console.log(state.users);
-      // if (state.users) {
-      //   state.users.push(action.payload);
-      // }
+      if (state.users) {
+        state.users.push(action.payload);
+      }
     },
-    remove(state, action) {
+    remove(state) {
       state.users = [];
     },
   },
@@ -26,7 +24,7 @@ const authSlice = createSlice({
     authorized(state) {
       state.isAuth = true;
     },
-    unauthorized(state, action) {
+    unauthorized(state) {
       state.isAuth = false;
     },
   },
@@ -39,14 +37,14 @@ const postsSlice = createSlice({
     addPost(state, action) {
       state.posts.push(action.payload);
     },
-    removePost(state, action) {
+    removePost(state) {
       state.posts = [];
     },
     addComment(state, action) {
       const post = state.currentPosts.filter((item) => {
         return item.id === action.payload.id;
       });
-      if (action.payload.comment) {
+      if (action.payload.comment && post[0]) {
         post[0].comments.push({
           text: action.payload.comment,
           id: action.payload.commentId,
@@ -64,7 +62,7 @@ const currentUserPostsSlice = createSlice({
     addCurrentPosts(state, action) {
       state.currentPosts = [...action.payload];
     },
-    removeCurrentPosts(state, action) {
+    removeCurrentPosts(state) {
       state.currentPosts = [];
     },
   },
@@ -79,7 +77,6 @@ const commentsSlice = createSlice({
         state.comments.push(action.payload);
       }
     },
-    removeCurrentComments(state, action) {},
   },
 });
 
@@ -104,8 +101,7 @@ export const commentsReducer = persistReducer(
 export const { add, remove } = usersSlice.actions;
 export const { authorized, unauthorized } = authSlice.actions;
 export const { addPost, removePost, addComment } = postsSlice.actions;
-export const { addCurrentPosts, removeCurrentPosts } =
-  currentUserPostsSlice.actions;
+export const { addCurrentPosts } = currentUserPostsSlice.actions;
 export const { addCurrentComments, removeCurrentComments } =
   commentsSlice.actions;
 
