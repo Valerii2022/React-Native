@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -9,9 +10,51 @@ import {
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import {
+  addComment,
+  currentPosts,
+  addCurrentComments,
+  currentComments,
+} from "../../Redux/rootReducer";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../config";
+import urid from "urid";
+import { getAuth } from "firebase/auth";
 
-const CommentsScreen = () => {
+const updateDataInFirestore = async (collectionName, docId, update) => {
+  try {
+    const ref = doc(db, collectionName, docId);
+
+    await updateDoc(ref, {
+      comments: update,
+    });
+    console.log("document updated");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const CommentsScreen = ({ route }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const date = Date();
+  const commentId = urid();
+  const currentUser = getAuth();
+  const postComments = useSelector(currentComments);
+
+  const { id } = route.params;
+  const posts = useSelector(currentPosts);
+  const [comment, setComment] = useState(null);
+  const post = posts.filter((item) => {
+    return item.id === id;
+  });
+
+  const allComments = postComments.filter((com) => {
+    if (com) {
+      return com.id === id;
+    }
+  });
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -25,60 +68,53 @@ const CommentsScreen = () => {
           <Text style={styles.headerTitle}>Коментарі</Text>
         </View>
         <View style={styles.main}>
-          <Image
-            style={styles.image}
-            source={require("../../assets/images/img-1.jpg")}
-          />
+          <Image style={styles.image} src={post.uriImage} />
           <View style={styles.comments}>
-            <View style={styles.commentsItemOwn}>
-              <Image
-                style={styles.commentsImage}
-                source={require("../../assets/images/com-1.png")}
-              />
-              <View style={styles.textWrapOwn}>
-                <Text style={styles.commentsText}>
-                  Really love your most recent photo. I’ve been trying to
-                  capture the same thing for a few months and would love some
-                  tips!
-                </Text>
-                <Text style={styles.commentsDate}>09 червня, 2020 | 08:40</Text>
-              </View>
-            </View>
-            <View style={[styles.commentsItemOwn, styles.commentsItem]}>
-              <Image
-                style={styles.commentsImage}
-                source={require("../../assets/images/com-2.png")}
-              />
-              <View style={[styles.textWrapOwn, styles.textWrap]}>
-                <Text style={styles.commentsText}>
-                  A fast 50mm like f1.8 would help with the bokeh. I’ve been
-                  using primes as they tend to get a bit sharper images.
-                </Text>
-                <Text style={styles.commentsDate}>09 червня, 2020 | 09:14</Text>
-              </View>
-            </View>
-            <View style={styles.commentsItemOwn}>
-              <Image
-                style={styles.commentsImage}
-                source={require("../../assets/images/com-1.png")}
-              />
-              <View style={styles.textWrapOwn}>
-                <Text style={styles.commentsText}>
-                  Thank you! That was very helpful!
-                </Text>
-                <Text style={styles.commentsDate}>09 червня, 2020 | 09:20</Text>
-              </View>
-            </View>
+            {post[0].id === id &&
+              post[0].comments.map((comment) => {
+                return (
+                  <View key={comment.commentId} style={styles.commentsItemOwn}>
+                    {currentUser.currentUser.photoURL ? (
+                      <Image
+                        style={styles.commentsImage}
+                        src={currentUser.currentUser.photoURL}
+                      />
+                    ) : (
+                      <Image
+                        style={styles.commentsImage}
+                        source={require("../../assets/images/default-avatar.jpg")}
+                      />
+                    )}
+
+                    <View style={styles.textWrapOwn}>
+                      <Text style={styles.commentsText}>{comment.comment}</Text>
+                      <Text style={styles.commentsDate}>{comment.date}</Text>
+                    </View>
+                  </View>
+                );
+              })}
           </View>
           <View style={styles.btnWrap}>
             <TextInput
+              onChangeText={setComment}
+              value={comment}
               style={styles.input}
               placeholder="Коментувати..."
             ></TextInput>
-            <Image
+            <Pressable
               style={styles.btnIcon}
-              source={require("../../assets/images/Send.png")}
-            />
+              onPress={() => {
+                dispatch(addCurrentComments({ id, comment, date, commentId }));
+                dispatch(addComment({ id, comment, date, commentId }));
+                updateDataInFirestore("posts", id, [
+                  ...allComments,
+                  { comment, date, commentId },
+                ]);
+                setComment(null);
+              }}
+            >
+              <Image source={require("../../assets/images/Send.png")} />
+            </Pressable>
           </View>
         </View>
       </View>
@@ -131,7 +167,11 @@ const styles = StyleSheet.create({
   commentsItem: {
     flexDirection: "row-reverse",
   },
-  commentsImage: {},
+  commentsImage: {
+    width: 28,
+    height: 28,
+    borderRadius: 100,
+  },
   textWrapOwn: {
     width: 299,
     padding: 16,

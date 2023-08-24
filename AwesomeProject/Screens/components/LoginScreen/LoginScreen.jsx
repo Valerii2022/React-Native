@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -12,6 +13,18 @@ import {
 } from "react-native";
 import Button from "../Button/Button";
 import { useNavigation } from "@react-navigation/native";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../../../config";
+import {
+  authorized,
+  unauthorized,
+  currentAuth,
+} from "../../../Redux/rootReducer";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -21,8 +34,25 @@ const LoginScreen = () => {
   const [focusPassword, setFocusPassword] = useState(false);
 
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
+  const loginDB = async ({ email, password }) => {
+    try {
+      const credentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      navigation.navigate("Home");
+      dispatch(authorized());
+      return credentials.user;
+    } catch (error) {
+      Alert.alert("Невірна адреса електронної пошти або пароль");
+      navigation.navigate("Login");
+      throw error;
+    }
+  };
 
   const onLogin = () => {
     if (email === "" || password === "") {
@@ -40,9 +70,9 @@ const LoginScreen = () => {
     console.log(
       `Адреса електронної пошти - "${email}", пароль - "${password}"`
     );
+    loginDB({ email, password });
     setEmail("");
     setPassword("");
-    navigation.navigate("Home");
   };
 
   return (

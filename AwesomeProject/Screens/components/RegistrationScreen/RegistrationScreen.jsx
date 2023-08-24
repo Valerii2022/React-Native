@@ -10,20 +10,82 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  TouchableOpacity,
+  Pressable,
 } from "react-native";
 import Button from "../Button/Button";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+import { add, authorized } from "../../../Redux/rootReducer";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../../../config";
 
 const RegistrationScreen = () => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
+  const [userAvatar, setUserAvatar] = useState(null);
   const [password, setPassword] = useState("");
   const [passSecure, setPassSecure] = useState(true);
   const [focusLogin, setFocusLogin] = useState(false);
   const [focusEmail, setFocusEmail] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [cameraRef, setCameraRef] = useState(null);
+  const [camera, setCamera] = useState(false);
+  const [uriImage, setUriImage] = useState(
+    "http://www.caccd.com/Image/dummy.jpg"
+  );
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const registerDB = async ({ email, password }) => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      updateUserProfile({ displayName: login, photoURL: uriImage });
+      dispatch(add({ login, email, password, uriImage }));
+      dispatch(authorized());
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert("Помилка реєстрації");
+      navigation.navigate("Registration");
+      throw error;
+    }
+  };
+
+  async (onChange = () => {}) => {
+    onAuthStateChanged((user) => {
+      onChange(user);
+    });
+  };
+
+  const updateUserProfile = async (update) => {
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        console.log(auth.currentUser.displayName);
+        await updateProfile(user, update);
+      } catch (error) {
+        throw error;
+      }
+    }
+  };
+
+  const makePhoto = () => {
+    setCamera(!camera);
+    async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
+
+      setHasPermission(status === "granted");
+    };
+  };
 
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
@@ -47,10 +109,12 @@ const RegistrationScreen = () => {
     console.log(
       `Логін - "${login}",адреса електронної пошти - "${email}", пароль - "${password}"`
     );
+    registerDB({ email, password });
     setLogin("");
     setEmail("");
     setPassword("");
-    navigation.navigate("Home");
+    setCamera(false);
+    setUriImage("http://www.caccd.com/Image/dummy.jpg");
   };
 
   return (
@@ -67,10 +131,83 @@ const RegistrationScreen = () => {
         >
           <View style={styles.registrationContainer}>
             <View style={styles.avatar}>
-              <Image
-                style={styles.addIcon}
-                source={require("../../../assets/images/add.png")}
-              />
+              {camera ? (
+                <Camera
+                  style={styles.camera}
+                  type={type}
+                  ref={setCameraRef}
+                  ratio={"1:1"}
+                >
+                  <View style={styles.photoView}>
+                    <TouchableOpacity
+                      style={styles.flipContainer}
+                      onPress={() => {
+                        setType(
+                          type === Camera.Constants.Type.back
+                            ? Camera.Constants.Type.front
+                            : Camera.Constants.Type.back
+                        );
+                      }}
+                    >
+                      <Image
+                        style={{
+                          width: 40,
+                          height: 40,
+                          marginTop: 2,
+                          marginRight: 2,
+                          opacity: 0.3,
+                        }}
+                        source={require("../../../assets/images/flip2.png")}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={async () => {
+                        if (cameraRef) {
+                          const { uri } = await cameraRef.takePictureAsync();
+                          await MediaLibrary.createAssetAsync(uri);
+                          setUriImage(uri);
+                          setCamera(!camera);
+                        }
+                      }}
+                    >
+                      <View style={styles.takePhotoOut}>
+                        <View style={styles.takePhotoInner}>
+                          <Image
+                            style={styles.cameraIcon}
+                            source={require("../../../assets/images/camera.png")}
+                          />
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </Camera>
+              ) : (
+                <Image style={styles.photo} src={uriImage} />
+              )}
+              {camera ? (
+                <Pressable
+                  onPress={() => {
+                    makePhoto();
+                  }}
+                >
+                  <Image
+                    style={styles.deleteIcon}
+                    source={require("../../../assets/images/delete.png")}
+                  />
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => {
+                    makePhoto();
+                  }}
+                >
+                  <Image
+                    style={styles.addIcon}
+                    source={require("../../../assets/images/add.png")}
+                  />
+                </Pressable>
+              )}
             </View>
             <Text style={styles.title}>Реєстрація</Text>
             <TextInput
@@ -160,6 +297,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
+  photo: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
+  },
   avatar: {
     width: 120,
     height: 120,
@@ -170,10 +312,64 @@ const styles = StyleSheet.create({
     left: "50%",
     transform: [{ translateX: -50 }],
   },
+  camera: {
+    flex: 1,
+  },
+  photoView: {
+    flex: 1,
+    backgroundColor: "transparent",
+    justifyContent: "flex-start",
+  },
+
+  flipContainer: {
+    flex: 0.5,
+    alignSelf: "flex-end",
+  },
+
+  button: { alignSelf: "center" },
+
+  takePhotoOut: {
+    height: 60,
+    width: 60,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 50,
+    top: 0,
+    left: 0,
+  },
+
+  takePhotoInner: {
+    height: 60,
+    width: 60,
+    backgroundColor: "rgba(255,255,255,0.3)",
+    borderRadius: 50,
+  },
+
+  cameraIconWrap: {
+    width: 60,
+    height: 60,
+    backgroundColor: "rgba(255,255,255,0.3)",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: [{ translateX: -30 }, { translateY: -30 }],
+    borderRadius: 100,
+  },
+  cameraIcon: {
+    position: "absolute",
+    top: 18,
+    left: 18,
+  },
   addIcon: {
     position: "absolute",
     bottom: 14,
     right: -12,
+  },
+  deleteIcon: {
+    position: "absolute",
+    bottom: 8,
+    right: -18,
   },
   registrationContainer: {
     width: "100%",

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -8,15 +9,23 @@ import {
   ScrollView,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from "react-native";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../config";
 import SecondaryButton from "../components/Button/SecondaryButton";
 import { useNavigation } from "@react-navigation/native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
+import { addPost, removePost } from "../../Redux/rootReducer";
+import { getAuth } from "firebase/auth";
 
 const CreatePostsScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const user = getAuth();
+  const userId = user.currentUser.uid;
 
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
@@ -24,7 +33,10 @@ const CreatePostsScreen = () => {
   const [uriImage, setUriImage] = useState(null);
   const [location, setLocation] = useState(null);
   const [postName, setPostName] = useState("");
+  const [camera, setCamera] = useState(true);
   const [postLocation, setPostLocation] = useState("");
+  const comments = [];
+  const likes = null;
 
   useEffect(() => {
     (async () => {
@@ -42,19 +54,69 @@ const CreatePostsScreen = () => {
     return <Text>No access to camera</Text>;
   }
 
+  const writeDataToFirestore = async (
+    uid,
+    postName,
+    postLocation,
+    location,
+    uriImage,
+    comments,
+    likes
+  ) => {
+    try {
+      const docRef = await addDoc(collection(db, "posts"), {
+        uid,
+        postName,
+        postLocation,
+        location,
+        uriImage,
+        comments,
+        likes,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      throw e;
+    }
+  };
+
   const onPublish = async () => {
-    let location = await Location.getCurrentPositionAsync({});
-    const coords = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    };
-    setLocation(coords);
-    console.log(postName, postLocation, location, uriImage);
-    setLocation("");
-    setUriImage(null);
-    setPostName("");
-    setPostLocation("");
-    navigation.navigate("Posts");
+    if (uriImage) {
+      let location = await Location.getCurrentPositionAsync({});
+      const coords = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+      setLocation(coords);
+      writeDataToFirestore(
+        userId,
+        postName,
+        postLocation,
+        location,
+        uriImage,
+        comments,
+        likes
+      );
+      dispatch(
+        addPost({
+          userId,
+          postName,
+          postLocation,
+          location,
+          uriImage,
+          comments,
+          likes,
+        })
+      );
+      setLocation("");
+      setUriImage(null);
+      setPostName("");
+      setPostLocation("");
+      setCamera(!camera);
+      navigation.navigate("Posts");
+    } else {
+      Alert.alert("Додайте фото!");
+    }
   };
 
   return (
@@ -63,7 +125,11 @@ const CreatePostsScreen = () => {
         <View style={styles.header}>
           <Pressable
             style={styles.goBack}
-            onPress={() => navigation.navigate("Posts")}
+            onPress={() => {
+              console.log(uriImage);
+              setCamera(true);
+              navigation.navigate("Posts");
+            }}
           >
             <Image source={require("../../assets/images/arrow-left.png")} />
           </Pressable>
@@ -72,69 +138,63 @@ const CreatePostsScreen = () => {
         <View style={styles.main}>
           <View style={styles.photoWrapper}>
             <View style={styles.cameraContainer}>
-              <Camera
-                style={styles.camera}
-                type={type}
-                ref={setCameraRef}
-                ratio={"1:1"}
-              >
-                <View style={styles.photoView}>
-                  <TouchableOpacity
-                    style={styles.flipContainer}
-                    onPress={() => {
-                      setType(
-                        type === Camera.Constants.Type.back
-                          ? Camera.Constants.Type.front
-                          : Camera.Constants.Type.back
-                      );
-                    }}
-                  >
-                    <Image
-                      style={{
-                        width: 60,
-                        height: 60,
-                        marginTop: 10,
-                        marginRight: 10,
-                        opacity: 0.3,
-                      }}
-                      source={require("../../assets/images/flip2.png")}
-                    />
-                    {/* <Text
-                      style={{
-                        fontSize: 24,
-                        marginTop: 10,
-                        marginRight: 10,
-                        color: "white",
+              {camera ? (
+                <Camera
+                  style={styles.camera}
+                  type={type}
+                  ref={setCameraRef}
+                  ratio={"1:1"}
+                >
+                  <View style={styles.photoView}>
+                    <TouchableOpacity
+                      style={styles.flipContainer}
+                      onPress={() => {
+                        setType(
+                          type === Camera.Constants.Type.back
+                            ? Camera.Constants.Type.front
+                            : Camera.Constants.Type.back
+                        );
                       }}
                     >
-                      {" "}
-                      Flip{" "}
-                    </Text> */}
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={async () => {
-                      if (cameraRef) {
-                        const { uri } = await cameraRef.takePictureAsync();
-                        await MediaLibrary.createAssetAsync(uri);
-                        setUriImage(uri);
-                      }
-                    }}
-                  >
-                    <View style={styles.takePhotoOut}>
-                      <View style={styles.takePhotoInner}>
-                        <Image
-                          style={styles.cameraIcon}
-                          source={require("../../assets/images/camera.png")}
-                        />
+                      <Image
+                        style={{
+                          width: 60,
+                          height: 60,
+                          marginTop: 10,
+                          marginRight: 10,
+                          opacity: 0.3,
+                        }}
+                        source={require("../../assets/images/flip2.png")}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={async () => {
+                        if (cameraRef) {
+                          const { uri } = await cameraRef.takePictureAsync();
+                          await MediaLibrary.createAssetAsync(uri);
+                          setUriImage(uri);
+                          setCamera(!camera);
+                        }
+                      }}
+                    >
+                      <View style={styles.takePhotoOut}>
+                        <View style={styles.takePhotoInner}>
+                          <Image
+                            style={styles.cameraIcon}
+                            source={require("../../assets/images/camera.png")}
+                          />
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </Camera>
+                    </TouchableOpacity>
+                  </View>
+                </Camera>
+              ) : (
+                <Image style={styles.default} src={uriImage} />
+              )}
             </View>
           </View>
-          <Text style={styles.photoAction}>Завантажте фото</Text>
+          <Text style={styles.photoAction}>Завантажити фото</Text>
           <TextInput
             value={postName}
             onChangeText={setPostName}
@@ -232,6 +292,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     top: 0,
     left: 0,
+  },
+  default: {
+    width: "100%",
+    height: "100%",
   },
 
   takePhotoInner: {

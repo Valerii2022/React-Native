@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -7,22 +8,52 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-
-const Tabs = createBottomTabNavigator();
+import {
+  addCurrentPosts,
+  removeCurrentPosts,
+  currentPosts,
+  unauthorized,
+} from "../../Redux/rootReducer";
+import { getAuth } from "firebase/auth";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../config";
 
 const PostsScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const currentUserPosts = useSelector(currentPosts);
+
+  const currentUser = getAuth();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const posts = [];
+        const snapshot = await getDocs(
+          collection(db, "posts"),
+          where("uid", "==", currentUser.currentUser.uid)
+        );
+        snapshot.forEach((doc) => posts.push({ id: doc.id, ...doc.data() }));
+        dispatch(addCurrentPosts(posts));
+      } catch (error) {
+        throw error;
+      }
+    })();
+  }, [currentUserPosts]);
+
+  const logout = () => {
+    dispatch(unauthorized());
+    dispatch(removeCurrentPosts());
+    navigation.navigate("Login");
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Публікації</Text>
-          <Pressable
-            style={styles.logOut}
-            onPress={() => navigation.navigate("Login")}
-          >
+          <Pressable style={styles.logOut} onPress={logout}>
             <Image source={require("../../assets/images/logout.png")} />
           </Pressable>
         </View>
@@ -30,63 +61,76 @@ const PostsScreen = () => {
           <View style={styles.user}>
             <Image
               style={styles.userAvatar}
-              source={require("../../assets/images/user.jpg")}
+              src={currentUser.currentUser.photoURL}
             />
             <View style={styles.userInfo}>
-              <Text style={styles.userName}>Natali Romanova</Text>
-              <Text style={styles.userEmail}>email@example.com</Text>
+              <Text style={styles.userName}>
+                {currentUser.currentUser.displayName}
+              </Text>
+              <Text style={styles.userEmail}>
+                {currentUser.currentUser.email}
+              </Text>
             </View>
           </View>
-          <View style={styles.postWrap}>
-            <Image
-              style={styles.postImage}
-              source={require("../../assets/images/img-1.jpg")}
-            />
-            <Text style={styles.postTitle}>Ліс</Text>
-            <View style={styles.postInfoWrap}>
-              <View style={styles.commentsWrap}>
-                <Image
-                  style={styles.postImage}
-                  source={require("../../assets/images/comment.png")}
-                />
-                <Text style={styles.commentNumber}>0</Text>
-              </View>
-              <View style={styles.locationWrap}>
-                <Image
-                  style={styles.postImage}
-                  source={require("../../assets/images/map-pin.png")}
-                />
-                <Text style={styles.location}>
-                  Ivano-Frankivs'k Region, Ukraine
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.postWrap}>
-            <Image
-              style={styles.postImage}
-              source={require("../../assets/images/img-2.jpg")}
-            />
-            <Text style={styles.postTitle}>Ліс</Text>
-            <View style={styles.postInfoWrap}>
-              <View style={styles.commentsWrap}>
-                <Image
-                  style={styles.postImage}
-                  source={require("../../assets/images/comment.png")}
-                />
-                <Text style={styles.commentNumber}>0</Text>
-              </View>
-              <View style={styles.locationWrap}>
-                <Image
-                  style={styles.postImage}
-                  source={require("../../assets/images/map-pin.png")}
-                />
-                <Text style={styles.location}>
-                  Ivano-Frankivs'k Region, Ukraine
-                </Text>
-              </View>
-            </View>
-          </View>
+          {currentUserPosts.map((post) => {
+            if (currentUser.currentUser.uid === post.uid) {
+              return (
+                <View key={post.id} style={styles.postWrap}>
+                  <Image style={styles.postPhoto} src={post.uriImage} />
+                  <Text style={styles.postTitle}>{post.postName}</Text>
+                  <View style={styles.postInfoWrap}>
+                    <View style={styles.commentsWrap}>
+                      <Pressable
+                        onPress={() => {
+                          navigation.navigate("Comments", { id: post.id });
+                        }}
+                      >
+                        {post.comments.length > 0 ? (
+                          <Image
+                            style={styles.postImage}
+                            source={require("../../assets/images/comment-active.png")}
+                          />
+                        ) : (
+                          <Image
+                            style={styles.postImage}
+                            source={require("../../assets/images/comment.png")}
+                          />
+                        )}
+                      </Pressable>
+                      {post.comments.length > 0 ? (
+                        <Text style={styles.commentNumberActive}>
+                          {post.comments.length}
+                        </Text>
+                      ) : (
+                        <Text style={styles.commentNumber}>
+                          {post.comments.length}
+                        </Text>
+                      )}
+                    </View>
+
+                    <View style={styles.locationWrap}>
+                      <Pressable
+                          onPress={() =>
+                            navigation.navigate("Maps", {
+                              currentCoords: post.location.coords,
+                            })
+                          }
+                          style={styles.locationWrap}
+                        >
+                          <Image
+                            style={styles.postImage}
+                            source={require("../../assets/images/map-pin.png")}
+                          />
+                          <Text style={styles.location}>
+                            {post.postLocation}
+                          </Text>
+                        </Pressable>
+                    </View>
+                  </View>
+                </View>
+              );
+            }
+          })}
         </View>
       </View>
     </ScrollView>
@@ -132,11 +176,14 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   userAvatar: {
+    width: 60,
+    height: 60,
     borderRadius: 16,
   },
   userInfo: {
     paddingLeft: 8,
   },
+
   userName: {
     fontFamily: "Roboto",
     fontWeight: 700,
@@ -156,6 +203,11 @@ const styles = StyleSheet.create({
   postImage: {
     marginBottom: 8,
   },
+  postPhoto: {
+    borderRadius: 8,
+    width: 343,
+    height: 240,
+  },
   postTitle: {
     color: "#212121",
     fontFamily: "Roboto",
@@ -172,6 +224,12 @@ const styles = StyleSheet.create({
   },
   commentNumber: {
     color: "#bdbdbd",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    marginLeft: 6,
+  },
+  commentNumberActive: {
+    color: "#212121",
     fontFamily: "Roboto",
     fontSize: 16,
     marginLeft: 6,
