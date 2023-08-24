@@ -22,14 +22,14 @@ import { db } from "../../config";
 const PostsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [currentUserPosts, setCurrentUserPosts] = useState([]);
+  // const [currentUserPosts, setCurrentUserPosts] = useState([]);
+  const currentUserPosts = useSelector(currentPosts);
 
   const currentUser = getAuth();
 
   useEffect(() => {
     (async () => {
-      const currentUserPosts = useSelector(currentPosts);
-      setCurrentUserPosts(currentUserPosts);
+      // setCurrentUserPosts(currentUserPosts);
       try {
         const posts = [];
         const snapshot = await getDocs(
@@ -42,7 +42,7 @@ const PostsScreen = () => {
         throw error;
       }
     })();
-  }, [currentUserPosts]);
+  }, []);
 
   const logout = () => {
     dispatch(unauthorized());
