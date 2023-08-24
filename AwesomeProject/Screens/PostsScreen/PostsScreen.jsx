@@ -44,7 +44,6 @@ const PostsScreen = () => {
 
   const logout = () => {
     dispatch(unauthorized());
-    dispatch(removeCurrentPosts());
     navigation.navigate("Login");
   };
 
