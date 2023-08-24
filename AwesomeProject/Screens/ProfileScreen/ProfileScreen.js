@@ -17,16 +17,48 @@ import {
   currentPosts,
 } from "../../Redux/rootReducer";
 import { getAuth } from "firebase/auth";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../config";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const currentUser = getAuth();
   const currentUserPosts = useSelector(currentPosts);
+  const [like, setLike] = useState(true);
 
   const logout = () => {
     dispatch(unauthorized());
     navigation.navigate("Login");
+  };
+
+  const updateDataInFirestore = async (collectionName, docId, update) => {
+    try {
+      const ref = doc(db, collectionName, docId);
+
+      await updateDoc(ref, {
+        likes: update,
+      });
+      console.log("document updated");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const likesCounter = (prev) => {
+    if (prev === 0) {
+      setLike(!like);
+      return 1;
+    }
+    let current;
+    if (like) {
+      current = Number(prev) + 1;
+    } else {
+      current = Number(prev) - 1;
+    }
+    setLike(!like);
+
+    return current;
   };
 
   return (
@@ -57,6 +89,7 @@ const ProfileScreen = () => {
             {currentUserPosts &&
               currentUserPosts.map((post) => {
                 if (post.uid === currentUser.currentUser.uid) {
+                  const postId = post.id;
                   return (
                     <View key={post.id} style={styles.postWrap}>
                       <Image style={styles.postImage} src={post.uriImage} />
@@ -89,13 +122,23 @@ const ProfileScreen = () => {
                               {post.comments.length}
                             </Text>
                           )}
-                          <Image
+                          <Pressable
+                            onPress={() => {
+                              updateDataInFirestore(
+                                "posts",
+                                postId,
+                                likesCounter(post.likes)
+                              );
+                            }}
                             style={styles.postImage}
-                            source={require("../../assets/images/like.png")}
-                          />
+                          >
+                            <Image
+                              source={require("../../assets/images/like.png")}
+                            />
+                          </Pressable>
                           {post.likes ? (
                             <Text style={styles.commentNumberActive}>
-                              {post.likes.length}
+                              {post.likes}
                             </Text>
                           ) : (
                             <Text style={styles.commentNumber}>0</Text>
