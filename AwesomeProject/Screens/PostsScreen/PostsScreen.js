@@ -42,7 +42,7 @@ const PostsScreen = () => {
         throw error;
       }
     })();
-  }, []);
+  }, [currentUserPosts]);
 
   const logout = () => {
     dispatch(unauthorized());

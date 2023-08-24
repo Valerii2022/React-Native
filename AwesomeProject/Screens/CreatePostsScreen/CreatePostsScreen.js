@@ -24,6 +24,7 @@ const CreatePostsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const user = getAuth();
+  const userId = user.currentUser.uid;
 
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
@@ -91,17 +92,25 @@ const CreatePostsScreen = () => {
       longitude: location.coords.longitude,
     };
     setLocation(coords);
-    dispatch(
-      addPost({ postName, postLocation, location, uriImage, comments, likes })
-    );
     writeDataToFirestore(
-      user.currentUser.uid,
+      userId,
       postName,
       postLocation,
       location,
       uriImage,
       comments,
       likes
+    );
+    dispatch(
+      addPost({
+        userId,
+        postName,
+        postLocation,
+        location,
+        uriImage,
+        comments,
+        likes,
+      })
     );
     setLocation("");
     setUriImage(null);

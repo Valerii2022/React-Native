@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
@@ -15,19 +15,24 @@ import {
   clearComments,
   addCurrentPosts,
   addPostComment,
+  removeCurrentPosts,
   currentPosts,
+  allPosts,
+  addCurrentComments,
+  removeCurrentComments,
+  currentComments,
 } from "../../Redux/rootReducer";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../config";
-import { nanoid } from "nanoid";
-import { v4 as uuidv4 } from "uuid";
+import urid from "urid";
+import { getAuth } from "firebase/auth";
 
 const updateDataInFirestore = async (collectionName, docId, update) => {
   try {
     const ref = doc(db, collectionName, docId);
 
     await updateDoc(ref, {
-      comments: [update],
+      comments: update,
     });
     console.log("document updated");
   } catch (error) {
@@ -37,16 +42,24 @@ const updateDataInFirestore = async (collectionName, docId, update) => {
 
 const CommentsScreen = ({ route }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const date = Date();
+  const commentId = urid();
+  const currentUser = getAuth();
+  const postComments = useSelector(currentComments);
+
   const { id } = route.params;
   const posts = useSelector(currentPosts);
-  const dispatch = useDispatch();
   const [comment, setComment] = useState(null);
-  const date = Date();
   const post = posts.filter((item) => {
     return item.id === id;
   });
-  let allComments = [];
-  let commentId = null;
+
+  const allComments = postComments.filter((com) => {
+    if (com) {
+      return com.id === id;
+    }
+  });
 
   return (
     <ScrollView>
@@ -65,18 +78,23 @@ const CommentsScreen = ({ route }) => {
           <View style={styles.comments}>
             {post[0].id === id &&
               post[0].comments.map((comment) => {
-                // commentId = uuidv4()
                 return (
-                  <View key={id} style={styles.commentsItemOwn}>
-                    <Image
-                      style={styles.commentsImage}
-                      source={require("../../assets/images/com-1.png")}
-                    />
+                  <View key={comment.commentId} style={styles.commentsItemOwn}>
+                    {currentUser.currentUser.photoURL ? (
+                      <Image
+                        style={styles.commentsImage}
+                        src={currentUser.currentUser.photoURL}
+                      />
+                    ) : (
+                      <Image
+                        style={styles.commentsImage}
+                        source={require("../../assets/images/default-avatar.jpg")}
+                      />
+                    )}
+
                     <View style={styles.textWrapOwn}>
-                      <Text style={styles.commentsText}>{comment}</Text>
-                      <Text style={styles.commentsDate}>
-                        09 червня, 2020 | 08:40
-                      </Text>
+                      <Text style={styles.commentsText}>{comment.comment}</Text>
+                      <Text style={styles.commentsDate}>{comment.date}</Text>
                     </View>
                   </View>
                 );
@@ -92,9 +110,14 @@ const CommentsScreen = ({ route }) => {
             <Pressable
               style={styles.btnIcon}
               onPress={() => {
-                dispatch(addComment({ comment, id }));
-                updateDataInFirestore("posts", id, comment);
+                dispatch(addCurrentComments({ id, comment, date, commentId }));
+                dispatch(addComment({ id, comment, date, commentId }));
+                updateDataInFirestore("posts", id, [
+                  ...allComments,
+                  { comment, date, commentId },
+                ]);
                 setComment(null);
+                console.log(allComments);
               }}
             >
               <Image source={require("../../assets/images/Send.png")} />
@@ -151,7 +174,11 @@ const styles = StyleSheet.create({
   commentsItem: {
     flexDirection: "row-reverse",
   },
-  commentsImage: {},
+  commentsImage: {
+    width: 28,
+    height: 28,
+    borderRadius: 100,
+  },
   textWrapOwn: {
     width: 299,
     padding: 16,

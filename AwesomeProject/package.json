@@ -22,7 +22,6 @@
     "expo-media-library": "~15.2.3",
     "expo-status-bar": "~1.4.4",
     "firebase": "^10.2.0",
-    "nanoid": "^4.0.2",
     "react": "18.2.0",
     "react-native": "0.71.8",
     "react-native-image-picker": "^5.6.0",
@@ -31,7 +30,7 @@
     "react-native-screens": "~3.20.0",
     "react-redux": "^8.1.2",
     "redux-persist": "^6.0.0",
-    "uuid": "^9.0.0"
+    "urid": "^1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ActionCodeOperation } from "firebase/auth";
 
 const usersSlice = createSlice({
   name: "users",
@@ -45,8 +46,12 @@ const postsSlice = createSlice({
       const post = state.currentPosts.filter((item) => {
         return item.id === action.payload.id;
       });
-      if (post[0]) {
-        post[0].comments.push(action.payload.comment);
+      if (action.payload.comment) {
+        post[0].comments.push({
+          text: action.payload.comment,
+          id: action.payload.commentId,
+          date: action.payload.date,
+        });
       }
     },
   },
@@ -65,18 +70,18 @@ const currentUserPostsSlice = createSlice({
   },
 });
 
-// const commentsSlice = createSlice({
-//   name: "comments",
-//   initialState: { comments: [] },
-//   reducers: {
-//     addComment(state, action) {
-//       state.comments.push(action.payload);
-//     },
-//     removeComment(state, action) {
-//       state.comments = [];
-//     },
-//   },
-// });
+const commentsSlice = createSlice({
+  name: "comments",
+  initialState: { comments: [] },
+  reducers: {
+    addCurrentComments(state, action) {
+      if (action.payload.comment) {
+        state.comments.push(action.payload);
+      }
+    },
+    removeCurrentComments(state, action) {},
+  },
+});
 
 const persistConfig = {
   key: "root",
@@ -90,10 +95,10 @@ export const currentPostsReducer = persistReducer(
   persistConfig,
   currentUserPostsSlice.reducer
 );
-// export const commentsReducer = persistReducer(
-//   persistConfig,
-//   commentsSlice.reducer
-// );
+export const commentsReducer = persistReducer(
+  persistConfig,
+  commentsSlice.reducer
+);
 
 // export const rootReducer = usersSlice.reducer;
 export const { add, remove } = usersSlice.actions;
@@ -101,11 +106,12 @@ export const { authorized, unauthorized } = authSlice.actions;
 export const { addPost, removePost, addComment } = postsSlice.actions;
 export const { addCurrentPosts, removeCurrentPosts } =
   currentUserPostsSlice.actions;
-// export const { addComment, removeComment } = commentsSlice.actions;
+export const { addCurrentComments, removeCurrentComments } =
+  commentsSlice.actions;
 
 // Selectors
 export const usersNames = (state) => state.users.users;
 export const currentAuth = (state) => state.isAuth.isAuth;
-export const posts = (state) => state.posts.posts;
+export const allPosts = (state) => state.posts.posts;
 export const currentPosts = (state) => state.currentPosts.currentPosts;
-// export const comments = (state) => state.comments.comments;
+export const currentComments = (state) => state.comments.comments;

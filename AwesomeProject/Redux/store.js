@@ -22,7 +22,7 @@ export const store = configureStore({
     isAuth: authReducer,
     posts: postsReducer,
     currentPosts: currentPostsReducer,
-    // comments: commentsReducer,
+    comments: commentsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
