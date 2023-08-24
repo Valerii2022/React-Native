@@ -109,11 +109,22 @@ const PostsScreen = () => {
                     </View>
 
                     <View style={styles.locationWrap}>
-                      <Image
-                        style={styles.postImage}
-                        source={require("../../assets/images/map-pin.png")}
-                      />
-                      <Text style={styles.location}>{post.postLocation}</Text>
+                      <Pressable
+                          onPress={() =>
+                            navigation.navigate("Maps", {
+                              currentCoords: post.location.coords,
+                            })
+                          }
+                          style={styles.locationWrap}
+                        >
+                          <Image
+                            style={styles.postImage}
+                            source={require("../../assets/images/map-pin.png")}
+                          />
+                          <Text style={styles.location}>
+                            {post.postLocation}
+                          </Text>
+                        </Pressable>
                     </View>
                   </View>
                 </View>
